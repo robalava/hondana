@@ -614,8 +614,9 @@ body {
 var allBooks = [];
 var currentGenre = "";
 var SHELF_W = Math.min(window.innerWidth - 8, 560);
-var BOOK_W = 52;
-var GAP = 2;
+var isMobile = window.innerWidth <= 500;
+var BOOK_W = isMobile ? 52 : 62;
+var GAP = 3;
 var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - 8) / (BOOK_W + GAP)));
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
