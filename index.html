@@ -614,7 +614,7 @@ body {
 var allBooks = [];
 var currentGenre = "";
 var SHELF_W = Math.min(window.innerWidth - 8, 560);
-var SHELF_SIZE = window.innerWidth <= 500 ? 4 : 7;
+var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - 16) / (68 + 3)));
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
@@ -746,12 +746,7 @@ function renderShelf(books) {
       var spineH = 170 + (h % 40); // 170〜209px（表紙画像200pxより少し低め）
       var coverH = Math.round(spineH * 0.74);
       html += '<div class="book-item" onclick="openModal(' + globalIdx + ')">';
-      if (b.cover) {
-        html += '<img class="book-cover-img" src="' + esc(b.cover) + '" alt="' + esc(b.title) + '" loading="lazy" style="height:' + spineH + 'px" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
-        html += '<div class="book-spine ' + spineColor(b.title) + '" style="display:none;height:' + spineH + 'px">' + esc(b.title) + '</div>';
-      } else {
-        html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px">' + esc(b.title) + '</div>';
-      }
+      html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px">' + esc(b.title) + '</div>';
       html += '</div>';
     });
     html += '</div>';
