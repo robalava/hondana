@@ -307,7 +307,7 @@ body {
 
 .book-cover-img {
   width: auto;
-  height: 100%;
+  height: 200px;
   object-fit: cover;
   border-radius: 1px 4px 4px 1px;
   box-shadow:
@@ -613,10 +613,10 @@ body {
 <script>
 var allBooks = [];
 var currentGenre = "";
-var BOOK_W = 68 + 3; // 本幅 + gap
-var SHELF_PAD = 16;  // 左右padding
+var BOOK_W = 68 + 3; // 背表紙幅 + gap（表紙画像がある本は広くなるが、SHELF_SIZEは少なめに設定）
+var SHELF_PAD = 16;
 var SHELF_W = Math.min(window.innerWidth - 8, 560);
-var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - SHELF_PAD) / BOOK_W));
+var SHELF_SIZE = Math.max(2, Math.floor((SHELF_W - SHELF_PAD) / BOOK_W) - 1); // 画像本の幅を考慮して1冊少なく
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
@@ -745,11 +745,11 @@ function renderShelf(books) {
       // 本の高さにランダムな変化（タイトルのハッシュから決定論的に）
       var h = 0;
       for (var ci = 0; ci < b.title.length; ci++) h = (h * 31 + b.title.charCodeAt(ci)) & 0xffff;
-      var spineH = 180 + (h % 60); // 180〜239px
+      var spineH = 170 + (h % 40); // 170〜209px（表紙画像200pxより少し低め）
       var coverH = Math.round(spineH * 0.74);
       html += '<div class="book-item" onclick="openModal(' + globalIdx + ')">';
       if (b.cover) {
-        html += '<img class="book-cover-img" src="' + esc(b.cover) + '" alt="' + esc(b.title) + '" loading="lazy" style="height:' + spineH + 'px" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
+        html += '<img class="book-cover-img" src="' + esc(b.cover) + '" alt="' + esc(b.title) + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
         html += '<div class="book-spine ' + spineColor(b.title) + '" style="display:none;height:' + spineH + 'px">' + esc(b.title) + '</div>';
       } else {
         html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px">' + esc(b.title) + '</div>';
