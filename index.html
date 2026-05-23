@@ -60,7 +60,7 @@ body {
   font-size: 2rem;
   font-weight: 700;
   color: #f4ece0;
-  letter-spacing: .3em;
+  letter-spacing: .15em;
   margin-bottom: .5rem;
   text-shadow: 0 1px 4px rgba(0,0,0,.25);
 }
@@ -137,7 +137,7 @@ body {
 .shelf {
   margin-bottom: 2rem;
   position: relative;
-  width: 100%;
+  width: 100%; /* PCはデフォルトで全幅 */
 }
 
 /* 本の並び */
@@ -613,11 +613,22 @@ body {
 <script>
 var allBooks = [];
 var currentGenre = "";
-var SHELF_W = Math.min(window.innerWidth - 8, 560);
 var isMobile = window.innerWidth <= 500;
-var BOOK_W = isMobile ? 52 : 62;
-var GAP = 3;
-var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - 8) / (BOOK_W + GAP)));
+
+// PC: 68px幅・gap3px・棚板100%幅
+// スマホ: 52px幅・gap2px・棚板固定幅（5冊分）で中央揃え
+var BOOK_W, GAP, SHELF_SIZE, EXACT_SHELF_W;
+if (isMobile) {
+  BOOK_W = 52;
+  GAP = 2;
+  SHELF_SIZE = 5; // スマホは5冊固定
+  EXACT_SHELF_W = SHELF_SIZE * BOOK_W + (SHELF_SIZE - 1) * GAP + 8; // 268px固定
+} else {
+  BOOK_W = 68;
+  GAP = 3;
+  SHELF_SIZE = 7; // PCは7冊固定
+  EXACT_SHELF_W = null; // PCは100%幅
+}
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
@@ -739,7 +750,8 @@ function renderShelf(books) {
   for (var i = 0; i < books.length; i += SHELF_SIZE) {
     var chunk = books.slice(i, i + SHELF_SIZE);
     var shelfNum = Math.floor(i / SHELF_SIZE) + 1;
-    html += '<div class="shelf">';
+    var shelfStyle = isMobile ? 'style="width:' + EXACT_SHELF_W + 'px"' : '';
+    html += '<div class="shelf" ' + shelfStyle + '>';
     html += '<div class="shelf-books">';
     chunk.forEach(function(b, idx){
       var globalIdx = i + idx;
@@ -749,8 +761,7 @@ function renderShelf(books) {
       var spineH = 160 + (h % 50); // 160〜209px（縦長でスリムな背表紙）
       var coverH = Math.round(spineH * 0.74);
       html += '<div class="book-item" onclick="openModal(' + globalIdx + ')">';
-      html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px;width:' + BOOK_W + 'px">' + esc(b.title) + '</div>';
-      html += '</div>';
+      html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px;width:' + BOOK_W + 'px">' + esc(b.title) + '</div>';      html += '</div>';
     });
     html += '</div>';
     html += '<div class="shelf-board"></div>';
