@@ -636,8 +636,18 @@ function openModal(idx) {
   if (!b) return;
   var top = document.getElementById("modal-top");
   var body = document.getElementById("modal-body");
+  // ISBN-13をISBN-10に変換（Amazon用）
+  function toIsbn10(isbn13) {
+    if (!isbn13 || isbn13.length !== 13) return isbn13;
+    var core = isbn13.slice(3, 12); // 978/979を除いた9桁
+    var sum = 0;
+    for (var i = 0; i < 9; i++) sum += (10 - i) * parseInt(core[i]);
+    var check = (11 - (sum % 11)) % 11;
+    return core + (check === 10 ? 'X' : check);
+  }
+  var amazonId = b.isbn && b.isbn.length === 13 ? toIsbn10(b.isbn) : b.isbn;
   var rakutenUrl = b.isbn
-    ? "https://www.amazon.co.jp/dp/" + b.isbn
+    ? "https://www.amazon.co.jp/dp/" + amazonId
     : "https://www.amazon.co.jp/s?k=" + encodeURIComponent(b.title) + "&i=stripbooks";
   var coverHtml = b.cover
     ? '<a href="' + rakutenUrl + '" target="_blank"><img class="modal-cover" src="' + esc(b.cover) + '" alt="表紙"></a>'
