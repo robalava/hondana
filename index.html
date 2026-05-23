@@ -77,26 +77,25 @@ body {
 /* ---- フィルターバー ---- */
 .filter-bar {
   background: #ccc4b4;
-  padding: .8rem 1rem;
+  padding: .6rem 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: .5rem;
   flex-wrap: wrap;
   border-bottom: 1px solid rgba(154,138,104,.35);
 }
 .filter-bar-inner {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  width: 440px;
-  max-width: calc(100vw - 2rem);
+  gap: .5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 560px;
 }
 .filter-label {
-  font-size: .72rem;
-  color: var(--ink3);
-  letter-spacing: .08em;
-  white-space: nowrap;
+  display: none;
 }
 .filter-btns {
   display: flex;
@@ -375,10 +374,11 @@ body {
   pointer-events: none;
 }
 .modal-cover {
-  width: 78px;
-  min-width: 78px;
-  height: 112px;
-  object-fit: cover;
+  width: 90px;
+  min-width: 90px;
+  max-height: 160px;
+  height: auto;
+  object-fit: contain;
   border-radius: 2px 5px 5px 2px;
   box-shadow: 4px 6px 16px rgba(0,0,0,.45), inset -2px 0 4px rgba(0,0,0,.2);
 }
@@ -613,7 +613,10 @@ body {
 <script>
 var allBooks = [];
 var currentGenre = "";
-var SHELF_SIZE = Math.max(3, Math.floor((Math.min(window.innerWidth, 560) - 32) / (68 + 3)));
+var BOOK_W = 68 + 3; // 本幅 + gap
+var SHELF_PAD = 32;  // 左右padding
+var SHELF_W = Math.min(window.innerWidth - 16, 560);
+var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - SHELF_PAD) / BOOK_W));
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
@@ -758,6 +761,10 @@ function renderShelf(books) {
     html += '</div>';
   }
   container.innerHTML = html;
+  // 棚幅を動的に設定
+  document.querySelectorAll('.shelf').forEach(function(s){
+    s.style.width = SHELF_W + 'px';
+  });
 }
 
 function renderEmpty(msg) {
