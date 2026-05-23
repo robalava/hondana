@@ -9,8 +9,6 @@
 :root {
   --wood:       #9a8a68;
   --wood2:      #b8a88a;
-  --wood3:      #c8b49a;
-  --wood-light: #d4c8a8;
   --paper:      #f0ebe0;
   --paper2:     #e2dbd0;
   --ink:        #261c10;
@@ -18,33 +16,27 @@
   --ink3:       #8a7a68;
   --red:        #7a3828;
   --gold:       #9a8a68;
-  --shadow:     rgba(38,28,16,0.15);
-  --shadow2:    rgba(38,28,16,0.07);
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  background: #d8d2c6;
-  background-image:
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 60px),
-    repeating-linear-gradient(0deg, rgba(0,0,0,0.025) 0, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 60px);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: 'Noto Sans JP', sans-serif;
   color: var(--ink);
+  background: #d8d2c6;
 }
 
-/* ---- ヘッダー ---- */
+/* ヘッダー */
 .site-header {
   background: linear-gradient(180deg, #8a7858 0%, #a89878 40%, #b8a88a 100%);
   border-bottom: 1px solid #7a6848;
-  padding: 2.5rem 1.5rem 2rem;
+  padding: 2rem 1.5rem 1.6rem;
   text-align: center;
   position: relative;
 }
-.site-header::before,
-.site-header::after {
+.site-header::before, .site-header::after {
   content: '';
   display: block;
   width: 120px;
@@ -52,57 +44,45 @@ body {
   background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
   margin: 0 auto;
 }
-.site-header::before { margin-bottom: 1.2rem; }
-.site-header::after  { margin-top: 1.2rem; }
-
+.site-header::before { margin-bottom: 1rem; }
+.site-header::after  { margin-top: 1rem; }
 .site-title {
   font-family: 'Shippori Mincho', serif;
   font-size: 2rem;
   font-weight: 700;
   color: #f4ece0;
   letter-spacing: .15em;
-  margin-bottom: .5rem;
+  margin-bottom: .4rem;
   text-shadow: 0 1px 4px rgba(0,0,0,.25);
 }
 .site-subtitle {
   font-size: .7rem;
   color: rgba(244,236,224,.65);
   letter-spacing: .25em;
-  font-family: 'Noto Sans JP', sans-serif;
   font-weight: 300;
   text-transform: uppercase;
 }
 .header-divider { display: none; }
 
-/* ---- フィルターバー ---- */
+/* フィルターバー */
 .filter-bar {
   background: #ccc4b4;
   padding: .35rem .8rem;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: .4rem;
   flex-wrap: wrap;
   border-bottom: 1px solid rgba(154,138,104,.35);
 }
 .filter-bar-inner {
   display: flex;
-  align-items: center;
-  gap: .35rem;
+  gap: .3rem;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
   max-width: 560px;
 }
-.filter-label {
-  display: none;
-}
-.filter-btns {
-  display: flex;
-  gap: .3rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
+.filter-label { display: none; }
+.filter-btns { display: flex; gap: .3rem; flex-wrap: wrap; justify-content: center; }
 .filter-btn {
   background: transparent;
   border: 1px solid rgba(154,138,104,.6);
@@ -114,14 +94,13 @@ body {
   cursor: pointer;
   transition: all .18s;
 }
-.filter-btn:hover,
-.filter-btn.active {
+.filter-btn:hover, .filter-btn.active {
   background: var(--wood2);
   border-color: var(--wood);
   color: var(--ink);
 }
 
-/* ---- 本棚コンテナ ---- */
+/* 本棚コンテナ */
 .shelves-wrap {
   flex: 1;
   padding: 1rem 1rem 3rem;
@@ -133,7 +112,7 @@ body {
   background: #b8b0a0;
 }
 
-/* 棚（木製レイアウト） */
+/* 棚 */
 .shelf {
   margin-bottom: 2rem;
   position: relative;
@@ -146,14 +125,12 @@ body {
   align-items: flex-end;
   gap: 3px;
   padding: .5rem .4rem 0;
-  min-height: 230px;
+  min-height: 220px;
   width: 100%;
   box-sizing: border-box;
   background: linear-gradient(180deg,
-    rgba(0,0,0,0) 0%,
-    rgba(0,0,0,0) 55%,
-    rgba(0,0,0,0.18) 85%,
-    rgba(0,0,0,0.28) 100%
+    rgba(0,0,0,0) 0%, rgba(0,0,0,0) 55%,
+    rgba(0,0,0,0.18) 85%, rgba(0,0,0,0.28) 100%
   );
   border-radius: 3px 3px 0 0;
   flex-wrap: nowrap;
@@ -164,28 +141,17 @@ body {
   position: absolute;
   bottom: 0; left: 0; right: 0;
   height: 18px;
-  background: linear-gradient(180deg,
-    rgba(0,0,0,0) 0%,
-    rgba(0,0,0,0.22) 100%
-  );
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.22) 100%);
   pointer-events: none;
 }
 
-/* 木の棚板 */
+/* 棚板 */
 .shelf-board {
   height: 20px;
   width: 100%;
-  background: linear-gradient(180deg,
-    #c0aa88 0%,
-    #a08868 25%,
-    #886848 60%,
-    #604830 100%
-  );
+  background: linear-gradient(180deg, #c0aa88 0%, #a08868 25%, #886848 60%, #604830 100%);
   border-radius: 1px;
-  box-shadow:
-    0 8px 20px rgba(38,28,16,.45),
-    0 3px 6px rgba(38,28,16,.3),
-    inset 0 1px 0 rgba(255,255,255,.2);
+  box-shadow: 0 8px 20px rgba(38,28,16,.45), 0 3px 6px rgba(38,28,16,.3), inset 0 1px 0 rgba(255,255,255,.2);
   position: relative;
 }
 .shelf-board::before {
@@ -193,13 +159,7 @@ body {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 4px;
-  background: linear-gradient(90deg,
-    rgba(255,255,255,.04),
-    rgba(255,255,255,.16) 30%,
-    rgba(255,255,255,.20) 50%,
-    rgba(255,255,255,.16) 70%,
-    rgba(255,255,255,.04)
-  );
+  background: linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.20) 50%, rgba(255,255,255,.04));
 }
 .shelf-board::after {
   content: '';
@@ -207,7 +167,6 @@ body {
   bottom: 0; left: 0; right: 0;
   height: 6px;
   background: rgba(0,0,0,.15);
-  border-radius: 0 0 1px 1px;
 }
 
 /* 本 */
@@ -228,9 +187,8 @@ body {
   position: relative;
 }
 
+/* 背表紙 — 幅はJS側でinlineで指定するのでここでは指定しない */
 .book-spine {
-  width: 52px;
-  min-width: 0;
   flex-shrink: 0;
   border-radius: 2px 3px 3px 2px;
   display: flex;
@@ -245,90 +203,45 @@ body {
   letter-spacing: .16em;
   line-height: 1.4;
   overflow: hidden;
-  box-shadow:
-    inset -4px 0 8px rgba(0,0,0,.3),
-    inset 3px 0 4px rgba(255,255,255,.07),
-    3px 0 8px rgba(0,0,0,.25);
+  box-shadow: inset -4px 0 8px rgba(0,0,0,.3), inset 3px 0 4px rgba(255,255,255,.07), 3px 0 8px rgba(0,0,0,.25);
   position: relative;
 }
-
-/* アンティーク背表紙：くすんだ金色の繊細なライン */
 .book-spine::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background:
-    /* 左端のごく細い光沢 */
     linear-gradient(90deg, rgba(210,180,100,.18) 0%, rgba(210,180,100,.05) 4px, transparent 4px),
-    /* 上の細いライン×2本（くすんだ金色） */
     linear-gradient(180deg,
-      rgba(0,0,0,.0)            0px,
-      rgba(180,148,60,.0)       13px,
-      rgba(210,175,85,.55)      14px,
-      rgba(235,200,110,.75)     15px,
-      rgba(210,175,85,.55)      16px,
-      rgba(180,148,60,.0)       17px,
-      rgba(0,0,0,.0)            20px,
-      rgba(180,148,60,.0)       20px,
-      rgba(200,165,75,.35)      21px,
-      rgba(200,165,75,.35)      22px,
-      rgba(180,148,60,.0)       23px,
-      rgba(0,0,0,.0)            34px,
-      /* 下の細いライン×2本 */
-      rgba(0,0,0,.0)            calc(100% - 34px),
-      rgba(180,148,60,.0)       calc(100% - 23px),
-      rgba(200,165,75,.35)      calc(100% - 22px),
-      rgba(200,165,75,.35)      calc(100% - 21px),
-      rgba(180,148,60,.0)       calc(100% - 20px),
-      rgba(0,0,0,.0)            calc(100% - 17px),
-      rgba(210,175,85,.55)      calc(100% - 16px),
-      rgba(235,200,110,.75)     calc(100% - 15px),
-      rgba(210,175,85,.55)      calc(100% - 14px),
-      rgba(180,148,60,.0)       calc(100% - 13px),
-      rgba(0,0,0,.0)            100%
+      rgba(0,0,0,.0) 0px, rgba(210,175,85,.55) 14px, rgba(235,200,110,.75) 15px,
+      rgba(210,175,85,.55) 16px, rgba(0,0,0,.0) 17px, rgba(200,165,75,.35) 21px,
+      rgba(200,165,75,.35) 22px, rgba(0,0,0,.0) 34px,
+      rgba(0,0,0,.0) calc(100% - 34px), rgba(200,165,75,.35) calc(100% - 22px),
+      rgba(200,165,75,.35) calc(100% - 21px), rgba(0,0,0,.0) calc(100% - 17px),
+      rgba(210,175,85,.55) calc(100% - 16px), rgba(235,200,110,.75) calc(100% - 15px),
+      rgba(210,175,85,.55) calc(100% - 14px), rgba(0,0,0,.0) 100%
     );
   pointer-events: none;
 }
-
-/* ごく薄い縦テクスチャ（布目のような） */
 .book-spine::after {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: repeating-linear-gradient(
-    180deg,
-    rgba(255,255,255,.0)   0px,
-    rgba(255,255,255,.0)   3px,
-    rgba(255,255,255,.015) 3px,
-    rgba(255,255,255,.015) 4px
-  );
+  background: repeating-linear-gradient(180deg, rgba(255,255,255,.0) 0px, rgba(255,255,255,.0) 3px, rgba(255,255,255,.015) 3px, rgba(255,255,255,.015) 4px);
   pointer-events: none;
 }
 
-.book-cover-img {
-  width: auto;
-  min-width: 120px;
-  max-width: 160px;
-  object-fit: cover;
-  border-radius: 1px 4px 4px 1px;
-  box-shadow:
-    3px 4px 12px rgba(38,28,16,.35),
-    inset -2px 0 4px rgba(0,0,0,.2);
-  display: block;
-  flex-shrink: 0;
-}
-
 /* 本の色 */
-.bc-0 { background: linear-gradient(160deg, #6a7a5a 0%, #4e5e44 100%); }
-.bc-1 { background: linear-gradient(160deg, #7a6050 0%, #5e4438 100%); }
-.bc-2 { background: linear-gradient(160deg, #506070 0%, #384858 100%); }
-.bc-3 { background: linear-gradient(160deg, #685870 0%, #4e4056 100%); }
-.bc-4 { background: linear-gradient(160deg, #706848 0%, #564e34 100%); }
-.bc-5 { background: linear-gradient(160deg, #506860 0%, #384e48 100%); }
-.bc-6 { background: linear-gradient(160deg, #785850 0%, #5c403a 100%); }
-.bc-7 { background: linear-gradient(160deg, #586858 0%, #405040 100%); }
+.bc-0 { background: linear-gradient(160deg, #6a7a5a, #4e5e44); }
+.bc-1 { background: linear-gradient(160deg, #7a6050, #5e4438); }
+.bc-2 { background: linear-gradient(160deg, #506070, #384858); }
+.bc-3 { background: linear-gradient(160deg, #685870, #4e4056); }
+.bc-4 { background: linear-gradient(160deg, #706848, #564e34); }
+.bc-5 { background: linear-gradient(160deg, #506860, #384e48); }
+.bc-6 { background: linear-gradient(160deg, #785850, #5c403a); }
+.bc-7 { background: linear-gradient(160deg, #586858, #405040); }
 
-/* ---- モーダル ---- */
+/* モーダル */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -341,7 +254,6 @@ body {
   padding: 1rem;
 }
 .modal-overlay.open { display: flex; }
-
 .modal {
   background: var(--paper);
   border-radius: 10px;
@@ -349,17 +261,16 @@ body {
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 32px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
+  box-shadow: 0 32px 80px rgba(0,0,0,.5);
   animation: modal-in .22s cubic-bezier(.34,1.2,.64,1);
 }
 @keyframes modal-in {
   from { opacity:0; transform: translateY(24px) scale(.96); }
   to   { opacity:1; transform: none; }
 }
-
 .modal-top {
   background: linear-gradient(160deg, #c4b49a 0%, #a89878 100%);
-  padding: 1.6rem;
+  padding: 1.4rem;
   display: flex;
   gap: 1.2rem;
   align-items: flex-start;
@@ -381,7 +292,7 @@ body {
   height: auto;
   object-fit: contain;
   border-radius: 2px 5px 5px 2px;
-  box-shadow: 4px 6px 16px rgba(0,0,0,.45), inset -2px 0 4px rgba(0,0,0,.2);
+  box-shadow: 4px 6px 16px rgba(0,0,0,.45);
 }
 .modal-cover-ph {
   width: 78px;
@@ -394,7 +305,6 @@ body {
   justify-content: center;
   font-size: .62rem;
   color: rgba(255,255,255,.5);
-  letter-spacing: .06em;
 }
 .modal-header-info { flex: 1; padding-top: .2rem; }
 .modal-title {
@@ -406,15 +316,8 @@ body {
   margin-bottom: .4rem;
   text-shadow: 0 1px 3px rgba(0,0,0,.3);
 }
-.modal-author {
-  font-size: .78rem;
-  color: rgba(250,244,232,.78);
-  margin-bottom: .15rem;
-}
-.modal-pub {
-  font-size: .7rem;
-  color: rgba(250,244,232,.55);
-}
+.modal-author { font-size: .78rem; color: rgba(250,244,232,.78); margin-bottom: .15rem; }
+.modal-pub    { font-size: .7rem;  color: rgba(250,244,232,.55); }
 .modal-genre-tag {
   display: inline-block;
   margin-top: .6rem;
@@ -424,12 +327,8 @@ body {
   border-radius: 20px;
   font-size: .65rem;
   color: rgba(250,244,232,.75);
-  letter-spacing: .06em;
 }
-
-.modal-body {
-  padding: 1.4rem 1.6rem 1.2rem;
-}
+.modal-body { padding: 1.4rem 1.6rem 1.2rem; }
 .modal-from {
   font-size: .72rem;
   color: var(--ink3);
@@ -471,33 +370,13 @@ body {
   letter-spacing: .1em;
 }
 .modal-close:hover { background: var(--paper2); color: var(--ink2); }
-.modal-close {
-  display: block;
-  width: 100%;
-  padding: .7rem;
-  border: none;
-  border-top: 1px solid var(--border, #d4c4b0);
-  background: transparent;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: .8rem;
-  color: var(--ink3);
-  cursor: pointer;
-  transition: background .18s;
-  border-radius: 0 0 8px 8px;
-}
-.modal-close:hover { background: var(--paper2); }
 
-/* ---- 空の状態 ---- */
-.empty-shelf {
-  text-align: center;
-  padding: 4rem 2rem;
-  color: var(--ink3);
-  opacity: .7;
-}
+/* 空の状態 */
+.empty-shelf { text-align: center; padding: 4rem 2rem; color: var(--ink3); opacity: .7; }
 .empty-shelf-icon { font-size: 3rem; margin-bottom: 1rem; }
 .empty-shelf-text { font-family: 'Shippori Mincho', serif; font-size: 1rem; letter-spacing: .1em; }
 
-/* ---- フッター ---- */
+/* フッター */
 .site-footer {
   background: #b8a88a;
   border-top: 1px solid #9a8a68;
@@ -507,12 +386,7 @@ body {
   bottom: 0;
   z-index: 50;
 }
-.footer-btns {
-  display: flex;
-  gap: .5rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
+.footer-btns { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; }
 .footer-add-btn {
   display: inline-block;
   padding: .5rem 1.2rem;
@@ -527,7 +401,6 @@ body {
   cursor: pointer;
   text-decoration: none;
   transition: background .2s;
-  box-shadow: 0 2px 6px rgba(0,0,0,.15);
 }
 .footer-add-btn:hover { background: var(--ink); }
 .footer-manage-btn {
@@ -545,12 +418,8 @@ body {
   text-decoration: none;
   transition: all .2s;
 }
-.footer-manage-btn:hover { background: rgba(38,28,16,.08); border-color: var(--ink2); }
-.footer-note {
-  margin-top: .4rem;
-  font-size: .65rem;
-  color: var(--ink3);
-}
+.footer-manage-btn:hover { background: rgba(38,28,16,.08); }
+.footer-note { margin-top: .4rem; font-size: .65rem; color: var(--ink3); }
 .loading {
   text-align: center;
   padding: 4rem 2rem;
@@ -558,14 +427,6 @@ body {
   font-family: 'Shippori Mincho', serif;
   letter-spacing: .1em;
   opacity: .6;
-}
-
-@media (max-width: 480px) {
-  .book-cover-img { width: 76px; height: 110px; }
-  .book-spine { width: 52px; font-size: .75rem; }
-  .shelves-wrap { padding: 1.5rem .5rem 4rem; }
-  .shelf { width: calc(100vw - 1rem) !important; }
-  .shelf-books { gap: 3px; padding: .8rem .5rem 0; }
 }
 </style>
 </head>
@@ -577,7 +438,6 @@ body {
   <div class="header-divider"></div>
 </header>
 
-<!-- フィルター -->
 <div class="filter-bar">
   <div class="filter-bar-inner">
     <span class="filter-label">絞り込み：</span>
@@ -587,13 +447,11 @@ body {
   </div>
 </div>
 
-<!-- 本棚 -->
 <div class="shelves-wrap">
   <div class="loading" id="loading">棚を整えています…</div>
-  <div id="shelf-container" style="display:none;"></div>
+  <div id="shelf-container" style="display:none;width:100%;display:none;"></div>
 </div>
 
-<!-- モーダル -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal" id="modal">
     <div class="modal-top" id="modal-top"></div>
@@ -602,7 +460,6 @@ body {
   </div>
 </div>
 
-<!-- フッター -->
 <footer class="site-footer">
   <div class="footer-btns">
     <a id="form-link" href="#" class="footer-add-btn">＋ 棚に本を並べる</a>
@@ -614,17 +471,22 @@ body {
 <script>
 var allBooks = [];
 var currentGenre = "";
+
+// PC/スマホ完全分離
 var isMobile = window.innerWidth <= 500;
-var BOOK_W = isMobile ? 52 : 68;
-var GAP = 3;
-var SHELF_SIZE = isMobile ? 6 : 7;
-// スマホは棚板幅を本がぴったり収まる幅に固定、PCはnull（100%幅）
-var EXACT_SHELF_W = isMobile ? (6 * BOOK_W + 5 * GAP + 8) : null;
+var BOOK_W   = isMobile ? 52 : 68;   // 背表紙幅
+var GAP      = 3;                     // 本と本の隙間
+var SHELF_SIZE = isMobile ? 6 : 7;   // 1棚の冊数
+
+// スマホ：棚板幅を固定（本がぴったり収まるサイズ）
+// PC   ：棚板は100%幅
+var SHELF_FIXED_W = isMobile
+  ? (SHELF_SIZE * BOOK_W + (SHELF_SIZE - 1) * GAP + 8)
+  : null;
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
 
-// フォーム・管理URLを設定
 document.getElementById('form-link').href   = GAS_URL + '?page=form';
 document.getElementById('manage-link').href = './manage.html';
 
@@ -634,12 +496,11 @@ function spineColor(str) {
   for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) & 0xffff;
   return SPINE_COLORS[h % SPINE_COLORS.length];
 }
-
 function esc(s) {
   return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
 
-// CSVをパース
+// CSV パース
 function parseCSV(text) {
   var lines = text.split('\n');
   if (lines.length < 2) return [];
@@ -648,55 +509,38 @@ function parseCSV(text) {
     var cols = splitCSVLine(lines[i]);
     if (!cols[0]) continue;
     books.push({
-      id:        cols[0] || '',
-      timestamp: cols[1] || '',
-      nickname:  cols[3] || '',
-      isbn:      cols[4] || '',
-      title:     cols[5] || '',
-      author:    cols[6] || '',
-      publisher: cols[7] || '',
-      cover:     cols[8] || '',
-      comment:   cols[9] || '',
-      genre:     cols[10] || ''
+      id: cols[0]||'', timestamp: cols[1]||'', nickname: cols[3]||'',
+      isbn: cols[4]||'', title: cols[5]||'', author: cols[6]||'',
+      publisher: cols[7]||'', cover: cols[8]||'', comment: cols[9]||'', genre: cols[10]||''
     });
   }
   books.reverse();
   return books;
 }
-
 function splitCSVLine(line) {
-  var cols = [];
-  var cur = '';
-  var inQ = false;
-  for (var i = 0; i < line.length; i++) {
-    var c = line[i];
-    if (c === '"') { inQ = !inQ; }
-    else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
-    else { cur += c; }
+  var cols=[], cur='', inQ=false;
+  for (var i=0;i<line.length;i++) {
+    var c=line[i];
+    if(c==='"'){inQ=!inQ;}
+    else if(c===','&&!inQ){cols.push(cur.trim());cur='';}
+    else{cur+=c;}
   }
   cols.push(cur.trim());
   return cols;
 }
 
-// データ読み込み - GAS経由でCORSを回避
-var GAS_API = GAS_URL + '?page=api&action=books';
-
-fetch(GAS_API, { redirect: 'follow' })
+// データ読み込み
+fetch(GAS_URL + '?page=api&action=books', { redirect: 'follow' })
   .then(function(r){ return r.text(); })
   .then(function(text){
     var json = text.trim();
-    if (json.indexOf('_booksCallback(') === 0) {
-      json = json.slice('_booksCallback('.length, -1);
-    }
+    if (json.indexOf('_booksCallback(') === 0) json = json.slice(15, -1);
     var res = JSON.parse(json);
     document.getElementById("loading").style.display = "none";
     document.getElementById("shelf-container").style.display = "block";
     if (!res || res.status !== "ok") { renderEmpty("データの読み込みに失敗しました"); return; }
     allBooks = res.books || [];
-    if (allBooks.length === 0) {
-      renderEmpty("まだ棚が空です。最初の一冊を並べてみましょう。");
-      return;
-    }
+    if (!allBooks.length) { renderEmpty("まだ棚が空です。最初の一冊を並べてみましょう。"); return; }
     buildFilters();
     renderShelf(allBooks);
   })
@@ -718,7 +562,6 @@ function buildFilters() {
     btn.addEventListener("click", function(){ filterBy(g, btn); });
     bar.appendChild(btn);
   });
-  // すべてボタンにイベント
   bar.querySelector('[data-genre=""]').addEventListener("click", function(){ filterBy("", this); });
 }
 
@@ -726,36 +569,33 @@ function filterBy(genre, el) {
   currentGenre = genre;
   document.querySelectorAll(".filter-btn").forEach(function(b){ b.classList.remove("active"); });
   el.classList.add("active");
-  var filtered = genre ? allBooks.filter(function(b){ return b.genre === genre; }) : allBooks;
-  renderShelf(filtered);
+  renderShelf(genre ? allBooks.filter(function(b){ return b.genre === genre; }) : allBooks);
 }
 
 function renderShelf(books) {
   var container = document.getElementById("shelf-container");
   if (!books.length) { renderEmpty(); return; }
-
-  // 現在表示中の本をグローバルに保持
   window._displayedBooks = books;
 
   var html = "";
   for (var i = 0; i < books.length; i += SHELF_SIZE) {
     var chunk = books.slice(i, i + SHELF_SIZE);
-    var shelfNum = Math.floor(i / SHELF_SIZE) + 1;
-    var shelfStyle = isMobile ? 'style="width:' + EXACT_SHELF_W + 'px"' : '';
-    html += '<div class="shelf" ' + shelfStyle + '>';
+    // 棚板幅：スマホは固定px、PCは100%
+    var shelfW = SHELF_FIXED_W ? 'width:' + SHELF_FIXED_W + 'px' : 'width:100%';
+    html += '<div class="shelf" style="' + shelfW + '">';
     html += '<div class="shelf-books">';
     chunk.forEach(function(b, idx){
       var globalIdx = i + idx;
-      // 本の高さにランダムな変化（タイトルのハッシュから決定論的に）
       var h = 0;
       for (var ci = 0; ci < b.title.length; ci++) h = (h * 31 + b.title.charCodeAt(ci)) & 0xffff;
-      var spineH = 160 + (h % 50); // 160〜209px（縦長でスリムな背表紙）
-      var coverH = Math.round(spineH * 0.74);
+      var spineH = 160 + (h % 50); // 160〜209px
+      // 背表紙幅はBOOK_Wをinlineで指定（CSSの固定値に依存しない）
       html += '<div class="book-item" onclick="openModal(' + globalIdx + ')">';
-      html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px;width:' + BOOK_W + 'px">' + esc(b.title) + '</div>';      html += '</div>';
+      html += '<div class="book-spine ' + spineColor(b.title) + '" style="width:' + BOOK_W + 'px;height:' + spineH + 'px">' + esc(b.title) + '</div>';
+      html += '</div>';
     });
     html += '</div>';
-    html += '<div class="shelf-board"></div>';
+    html += '<div class="shelf-board" style="' + shelfW + '"></div>';
     html += '</div>';
   }
   container.innerHTML = html;
@@ -763,10 +603,8 @@ function renderShelf(books) {
 
 function renderEmpty(msg) {
   document.getElementById("shelf-container").innerHTML =
-    '<div class="empty-shelf">' +
-    '<div class="empty-shelf-icon">📚</div>' +
-    '<div class="empty-shelf-text">' + (msg || "まだ棚が空です。最初の一冊を並べてみましょう。") + '</div>' +
-    '</div>';
+    '<div class="empty-shelf"><div class="empty-shelf-icon">📚</div>' +
+    '<div class="empty-shelf-text">' + (msg||"まだ棚が空です。最初の一冊を並べてみましょう。") + '</div></div>';
 }
 
 function openModal(idx) {
@@ -774,37 +612,30 @@ function openModal(idx) {
   if (!b) return;
   var top = document.getElementById("modal-top");
   var body = document.getElementById("modal-body");
-
-  // ISBNがあれば楽天のISBN直接検索、なければタイトル検索
   var rakutenUrl = b.isbn
     ? "https://books.rakuten.co.jp/search?sty=1&g=001&sitem=" + encodeURIComponent(b.isbn)
     : "https://books.rakuten.co.jp/search?sty=1&g=001&k=" + encodeURIComponent(b.title);
-
   var coverHtml = b.cover
-    ? '<a href="' + rakutenUrl + '" target="_blank"><img class="modal-cover" src="' + esc(b.cover) + '" alt="表紙" title="楽天ブックスで探す"></a>'
+    ? '<a href="' + rakutenUrl + '" target="_blank"><img class="modal-cover" src="' + esc(b.cover) + '" alt="表紙"></a>'
     : '<div class="modal-cover-ph">表紙なし</div>';
-
-  top.innerHTML =
-    coverHtml +
+  top.innerHTML = coverHtml +
     '<div class="modal-header-info">' +
       '<a href="' + rakutenUrl + '" target="_blank" style="text-decoration:none;color:inherit;">' +
-        '<div class="modal-title">' + esc(b.title) + ' <span style="font-size:.65rem;color:rgba(253,248,240,.6);">↗</span></div>' +
+        '<div class="modal-title">' + esc(b.title) + ' <span style="font-size:.65rem;opacity:.6;">↗</span></div>' +
       '</a>' +
       '<div class="modal-author">' + esc(b.author) + '</div>' +
       '<div class="modal-pub">' + esc(b.publisher) + '</div>' +
       (b.genre ? '<span class="modal-genre-tag">' + esc(b.genre) + '</span>' : '') +
     '</div>';
-
   body.innerHTML =
     '<div class="modal-from">棚主：<span class="from-name">' + esc(b.nickname) + '</span> さんの推薦</div>' +
     '<div class="modal-comment">' + esc(b.comment).replace(/\n/g,'<br>') + '</div>' +
     '<a href="' + rakutenUrl + '" target="_blank" style="display:block;margin-top:1rem;text-align:center;font-size:.75rem;color:var(--gold);text-decoration:underline;">楽天ブックスでこの本を探す ↗</a>';
-
   document.getElementById("modal-overlay").classList.add("open");
 }
 
 function closeModal(e) {
-  if (!e || e.target === document.getElementById("modal-overlay") || e.currentTarget.classList.contains("modal-close")) {
+  if (!e || e.target === document.getElementById("modal-overlay") || (e.currentTarget && e.currentTarget.classList.contains("modal-close"))) {
     document.getElementById("modal-overlay").classList.remove("open");
   }
 }
