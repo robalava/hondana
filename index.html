@@ -614,11 +614,9 @@ body {
 var allBooks = [];
 var currentGenre = "";
 var SHELF_W = Math.min(window.innerWidth - 8, 560);
-var SHELF_PAD = 10; // 左右padding合計
+var BOOK_W = 52;
 var GAP = 2;
-var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - SHELF_PAD) / (52 + GAP)));
-// 本の幅を棚幅÷冊数に合わせて計算（余白ゼロ）
-var BOOK_W = Math.floor((SHELF_W - SHELF_PAD - GAP * (SHELF_SIZE - 1)) / SHELF_SIZE);
+var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - 8) / (BOOK_W + GAP)));
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
