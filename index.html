@@ -605,15 +605,15 @@ function renderShelf(books) {
       var padPx = isMobile ? 28 : 34;
       var fontSize;
       if (isMobile) {
-        fontSize = titleLen <= 8  ? '.72rem'
-                 : titleLen <= 14 ? '.62rem'
-                 : titleLen <= 20 ? '.54rem'
-                 : '.48rem';
+        fontSize = titleLen <= 8  ? '.78rem'
+                 : titleLen <= 14 ? '.68rem'
+                 : titleLen <= 20 ? '.59rem'
+                 : '.52rem';
       } else {
-        fontSize = titleLen <= 10 ? '.72rem'
-                 : titleLen <= 18 ? '.62rem'
-                 : titleLen <= 26 ? '.56rem'
-                 : '.50rem';
+        fontSize = titleLen <= 10 ? '.78rem'
+                 : titleLen <= 18 ? '.68rem'
+                 : titleLen <= 26 ? '.60rem'
+                 : '.54rem';
       }
       html += '<div class="book-spine ' + spineColor(b.title) + '" style="width:' + BOOK_W + 'px;height:' + spineH + 'px;font-size:' + fontSize + ';padding:' + padPx + 'px .15rem">' + esc(b.title) + '</div>';
       html += '</div>';
