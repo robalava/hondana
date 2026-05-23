@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>馬蹄通り書店 — 自分の棚を見る</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f0ebe0;
+  --paper2: #e2dbd0;
+  --white: #faf7f2;
+  --ink: #261c10;
+  --ink2: #5a4430;
+  --ink3: #8a7a68;
+  --red: #7a3828;
+  --gold: #9a8a68;
+  --border: #ccc4b0;
+  --shadow: rgba(38,28,16,0.10);
+  --green: #3a6040;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--paper2);
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,160,130,0.12) 27px, rgba(180,160,130,0.12) 28px);
+  min-height: 100vh;
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--ink);
+  padding: 2rem 1rem 4rem;
+}
+
+.page-wrap { max-width: 560px; margin: 0 auto; }
+
+.page-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 2px solid var(--border);
+}
+.page-title {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  margin-bottom: .3rem;
+}
+.page-subtitle { font-size: .75rem; color: var(--ink3); letter-spacing: .1em; }
+
+/* ---- ログインブロック ---- */
+.login-block {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.4rem;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.block-label {
+  font-family: 'Shippori Mincho', serif;
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--ink2);
+  display: block;
+  margin-bottom: .5rem;
+  letter-spacing: .06em;
+}
+.block-note { font-size: .72rem; color: var(--ink3); margin-bottom: .8rem; line-height: 1.6; }
+
+.id-row { display: flex; gap: .6rem; }
+.id-input {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: .6rem .8rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .9rem;
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  transition: border-color .2s;
+}
+.id-input:focus { border-color: var(--gold); }
+
+.btn-primary {
+  background: var(--ink);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: .6rem 1.2rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .85rem;
+  cursor: pointer;
+  transition: background .2s;
+  white-space: nowrap;
+}
+.btn-primary:hover { background: var(--red); }
+.btn-primary:disabled { background: var(--ink3); cursor: default; }
+
+.status-msg { font-size: .75rem; margin-top: .6rem; color: var(--ink3); min-height: 1.2em; }
+.status-msg.error { color: var(--red); }
+
+/* ---- 登録本リスト ---- */
+.my-books { display: none; margin-top: 1.5rem; }
+.my-books.show { display: block; }
+
+.my-books-header {
+  font-family: 'Shippori Mincho', serif;
+  font-size: .85rem;
+  color: var(--ink2);
+  margin-bottom: 1rem;
+  padding-left: .3rem;
+  letter-spacing: .06em;
+}
+
+.book-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px var(--shadow);
+  overflow: hidden;
+}
+.book-card-top {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  align-items: flex-start;
+}
+.book-thumb {
+  width: 56px;
+  min-width: 56px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 2px 4px 4px 2px;
+  box-shadow: 1px 2px 6px var(--shadow);
+}
+.book-thumb-ph {
+  width: 56px;
+  min-width: 56px;
+  height: 80px;
+  background: var(--paper2);
+  border: 1px dashed var(--border);
+  border-radius: 2px 4px 4px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .6rem;
+  color: var(--ink3);
+}
+.book-info { flex: 1; min-width: 0; }
+.book-title {
+  font-family: 'Shippori Mincho', serif;
+  font-size: .95rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: .25rem;
+}
+.book-author { font-size: .75rem; color: var(--ink2); margin-bottom: .15rem; }
+.book-genre {
+  display: inline-block;
+  font-size: .65rem;
+  padding: .15rem .5rem;
+  background: var(--paper2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--ink3);
+  margin-bottom: .3rem;
+}
+.book-comment {
+  font-size: .78rem;
+  color: var(--ink2);
+  line-height: 1.7;
+  border-left: 2px solid var(--gold);
+  padding-left: .6rem;
+  margin-top: .4rem;
+}
+.book-date { font-size: .65rem; color: var(--ink3); margin-top: .3rem; }
+
+.book-actions {
+  display: flex;
+  gap: .5rem;
+  padding: .7rem 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--paper);
+}
+.btn-edit {
+  flex: 1;
+  padding: .5rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .78rem;
+  color: var(--ink2);
+  cursor: pointer;
+  transition: all .18s;
+}
+.btn-edit:hover { background: var(--paper2); border-color: var(--ink3); }
+.btn-delete {
+  flex: 1;
+  padding: .5rem;
+  border: 1px solid #c8a898;
+  border-radius: 4px;
+  background: transparent;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .78rem;
+  color: var(--red);
+  cursor: pointer;
+  transition: all .18s;
+}
+.btn-delete:hover { background: #f8eeea; }
+
+/* ---- 編集モーダル ---- */
+.modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(38,28,16,.5);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: var(--white);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 16px 48px rgba(0,0,0,.35);
+}
+.modal-header {
+  background: #b8a88a;
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-title-text {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: .08em;
+}
+.btn-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--ink2);
+  cursor: pointer;
+  line-height: 1;
+  padding: .2rem;
+}
+.modal-body { padding: 1.2rem; }
+
+.field { margin-bottom: 1rem; }
+.field:last-child { margin-bottom: 0; }
+.field-label {
+  font-family: 'Shippori Mincho', serif;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--ink2);
+  display: block;
+  margin-bottom: .4rem;
+}
+.text-input, .textarea-input, .select-input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: .55rem .75rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .88rem;
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  transition: border-color .2s;
+}
+.text-input:focus, .textarea-input:focus, .select-input:focus { border-color: var(--gold); }
+.textarea-input { resize: vertical; min-height: 80px; line-height: 1.7; }
+
+.modal-footer {
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: .6rem;
+}
+.btn-save {
+  flex: 1;
+  padding: .65rem;
+  background: var(--ink);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Shippori Mincho', serif;
+  font-size: .9rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-save:hover { background: var(--green); }
+.btn-save:disabled { background: var(--ink3); cursor: default; }
+.btn-cancel {
+  padding: .65rem 1.2rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .85rem;
+  color: var(--ink3);
+  cursor: pointer;
+}
+
+.empty-msg {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--ink3);
+  font-family: 'Shippori Mincho', serif;
+  font-size: .9rem;
+  letter-spacing: .08em;
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div style="text-align:right;margin-bottom:.8rem;">
+    <a href="./index.html" style="font-size:.75rem;color:var(--ink3);text-decoration:none;letter-spacing:.06em;">← 馬蹄通り書店へ戻る</a>
+  </div>
+
+  <div class="page-header">
+    <div class="page-title">📋 自分の棚を見る</div>
+    <div class="page-subtitle">書店員IDを入力して、登録した本を棚を直したり棚から外せます</div>
+  </div>
+
+  <!-- ID入力 -->
+  <div class="login-block">
+    <span class="block-label">書店員IDを入力してください</span>
+    <p class="block-note">本を登録したときに設定したIDを入力してください。</p>
+    <div class="id-row">
+      <input type="text" class="id-input" id="shopkeeper-id-input" placeholder="書店員ID">
+      <button class="btn-primary" id="btn-load" onclick="loadMyBooks()">確認する</button>
+    </div>
+    <div class="status-msg" id="load-status"></div>
+  </div>
+
+  <!-- 登録本リスト -->
+  <div class="my-books" id="my-books">
+    <div class="my-books-header" id="my-books-header"></div>
+    <div id="book-list"></div>
+  </div>
+
+</div>
+
+<!-- 編集モーダル -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title-text">棚を直す</span>
+      <button class="btn-modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-book-id">
+      <div class="field">
+        <span class="field-label">タイトル</span>
+        <input type="text" class="text-input" id="edit-title">
+      </div>
+      <div class="field">
+        <span class="field-label">著者名</span>
+        <input type="text" class="text-input" id="edit-author">
+      </div>
+      <div class="field">
+        <span class="field-label">出版社</span>
+        <input type="text" class="text-input" id="edit-publisher">
+      </div>
+      <div class="field">
+        <span class="field-label">ジャンル</span>
+        <select class="select-input" id="edit-genre">
+          <option value="">── 選択してください ──</option>
+          <option value="ファンタジー">ファンタジー</option>
+          <option value="SF">SF</option>
+          <option value="ミステリ">ミステリ</option>
+          <option value="文芸・純文学">文芸・純文学</option>
+          <option value="歴史・時代小説">歴史・時代小説</option>
+          <option value="ホラー">ホラー</option>
+          <option value="エッセイ">エッセイ</option>
+          <option value="詩歌">詩歌</option>
+          <option value="絵本・児童書">絵本・児童書</option>
+          <option value="漫画・グラフィックノベル">漫画・グラフィックノベル</option>
+          <option value="その他">その他</option>
+        </select>
+      </div>
+      <div class="field">
+        <span class="field-label">おすすめコメント</span>
+        <textarea class="textarea-input" id="edit-comment"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-save" id="btn-save" onclick="saveEdit()">保存する</button>
+      <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var currentId = "";
+var myBooks = [];
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
+
+function esc(s) {
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function gasPost(payload) {
+  return fetch(GAS_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  }).then(function(r){ return r.json(); });
+}
+
+function loadMyBooks() {
+  var id = document.getElementById("shopkeeper-id-input").value.trim();
+  if (!id) { showStatus("IDを入力してください", true); return; }
+  currentId = id;
+
+  var btn = document.getElementById("btn-load");
+  btn.disabled = true; btn.textContent = "確認中…";
+  showStatus("", false);
+
+  gasPost({ action: "getMyBooks", shopkeeper_id: id })
+    .then(function(res){
+      btn.disabled = false; btn.textContent = "確認する";
+      if (!res) { showStatus("エラーが発生しました。もう一度お試しください。", true); return; }
+      if (res.status === "empty") {
+        showStatus("このIDで登録された本はまだありません。", false);
+        document.getElementById("my-books").classList.remove("show");
+        return;
+      }
+      if (res.status !== "ok") {
+        showStatus(res.message || "エラーが発生しました", true); return;
+      }
+      myBooks = res.books;
+      renderBooks();
+      showStatus("", false);
+    })
+    .catch(function(err){
+      btn.disabled = false; btn.textContent = "確認する";
+      showStatus("通信エラー: " + err.message, true);
+    });
+}
+
+function renderBooks() {
+  var wrap = document.getElementById("my-books");
+  var list = document.getElementById("book-list");
+  var header = document.getElementById("my-books-header");
+
+  header.textContent = "— " + myBooks.length + " 冊登録されています —";
+  list.innerHTML = "";
+
+  if (!myBooks.length) {
+    list.innerHTML = '<div class="empty-msg">登録した本がありません</div>';
+    wrap.classList.add("show");
+    return;
+  }
+
+  myBooks.forEach(function(b){
+    var div = document.createElement("div");
+    div.className = "book-card";
+    div.innerHTML =
+      '<div class="book-card-top">' +
+        (b.cover
+          ? '<img class="book-thumb" src="' + esc(b.cover) + '" alt="表紙" onerror="this.outerHTML=\'<div class=book-thumb-ph>表紙なし</div>\'">'
+          : '<div class="book-thumb-ph">表紙なし</div>') +
+        '<div class="book-info">' +
+          '<div class="book-title">' + esc(b.title) + '</div>' +
+          '<div class="book-author">' + esc(b.author) + '</div>' +
+          (b.genre ? '<span class="book-genre">' + esc(b.genre) + '</span>' : '') +
+          '<div class="book-comment">' + esc(b.comment) + '</div>' +
+          '<div class="book-date">' + esc(b.timestamp) + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="book-actions">' +
+        '<button class="btn-edit" onclick="openEdit(' + JSON.stringify(b).replace(/"/g,"&quot;") + ')">✏️ 棚を直す</button>' +
+        '<button class="btn-delete" onclick="deleteBook(\'' + esc(b.id) + '\')">🗑 棚から外す</button>' +
+      '</div>';
+    list.appendChild(div);
+  });
+
+  wrap.classList.add("show");
+}
+
+function openEdit(b) {
+  document.getElementById("edit-book-id").value  = b.id;
+  document.getElementById("edit-title").value     = b.title     || "";
+  document.getElementById("edit-author").value    = b.author    || "";
+  document.getElementById("edit-publisher").value = b.publisher || "";
+  document.getElementById("edit-genre").value     = b.genre     || "";
+  document.getElementById("edit-comment").value   = b.comment   || "";
+  document.getElementById("modal-bg").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("modal-bg").classList.remove("open");
+}
+
+function saveEdit() {
+  var bookId = document.getElementById("edit-book-id").value;
+  var data = {
+    title:     document.getElementById("edit-title").value.trim(),
+    author:    document.getElementById("edit-author").value.trim(),
+    publisher: document.getElementById("edit-publisher").value.trim(),
+    genre:     document.getElementById("edit-genre").value,
+    comment:   document.getElementById("edit-comment").value.trim()
+  };
+  if (!data.title)   { alert("タイトルを入力してください。"); return; }
+  if (!data.comment) { alert("コメントを入力してください。"); return; }
+
+  var btn = document.getElementById("btn-save");
+  btn.disabled = true; btn.textContent = "保存中…";
+
+  gasPost({ action: "updateBook", shopkeeper_id: currentId, bookId: bookId, bookData: data })
+    .then(function(res){
+      btn.disabled = false; btn.textContent = "保存する";
+      if (res.status === "ok") {
+        closeModal();
+        loadMyBooks();
+      } else {
+        alert("エラー: " + (res.message || "不明なエラー"));
+      }
+    })
+    .catch(function(err){
+      btn.disabled = false; btn.textContent = "保存する";
+      alert("通信エラー: " + err.message);
+    });
+}
+
+function deleteBook(bookId) {
+  if (!confirm("この本を棚から外しますか？")) return;
+
+  gasPost({ action: "deleteBook", shopkeeper_id: currentId, bookId: bookId })
+    .then(function(res){
+      if (res.status === "ok") {
+        loadMyBooks();
+      } else {
+        alert("エラー: " + (res.message || "不明なエラー"));
+      }
+    })
+    .catch(function(err){
+      alert("通信エラー: " + err.message);
+    });
+}
+
+function showStatus(msg, isErr) {
+  var el = document.getElementById("load-status");
+  el.textContent = msg;
+  el.className = "status-msg" + (isErr ? " error" : "");
+}
+
+document.getElementById("shopkeeper-id-input").addEventListener("keydown", function(e){
+  if (e.key === "Enter") loadMyBooks();
+});
+
+document.getElementById("modal-bg").addEventListener("click", function(e){
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>

@@ -618,8 +618,8 @@ var SHELF_SIZE = 7;
 
 // フォーム・管理URLを設定
 var baseUrl = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
-document.getElementById('form-link').href   = baseUrl + '?page=form';
-document.getElementById('manage-link').href = baseUrl + '?page=manage';
+document.getElementById('form-link').href   = GAS_URL + '?page=form';
+document.getElementById('manage-link').href = './manage.html';
 
 var SPINE_COLORS = ['bc-0','bc-1','bc-2','bc-3','bc-4','bc-5','bc-6','bc-7'];
 function spineColor(str) {
