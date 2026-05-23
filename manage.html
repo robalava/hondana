@@ -365,6 +365,10 @@ body {
     <div class="modal-body">
       <input type="hidden" id="edit-book-id">
       <div class="field">
+        <span class="field-label">表紙画像URL</span>
+        <input type="text" class="text-input" id="edit-cover" placeholder="https://...">
+      </div>
+      <div class="field">
         <span class="field-label">タイトル</span>
         <input type="text" class="text-input" id="edit-title">
       </div>
@@ -494,6 +498,7 @@ function renderBooks() {
 
 function openEdit(b) {
   document.getElementById("edit-book-id").value  = b.id;
+  document.getElementById("edit-cover").value    = b.cover     || "";
   document.getElementById("edit-title").value     = b.title     || "";
   document.getElementById("edit-author").value    = b.author    || "";
   document.getElementById("edit-publisher").value = b.publisher || "";
@@ -509,6 +514,7 @@ function closeModal() {
 function saveEdit() {
   var bookId = document.getElementById("edit-book-id").value;
   var data = {
+    cover:     document.getElementById("edit-cover").value.trim(),
     title:     document.getElementById("edit-title").value.trim(),
     author:    document.getElementById("edit-author").value.trim(),
     publisher: document.getElementById("edit-publisher").value.trim(),
