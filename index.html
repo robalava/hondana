@@ -634,10 +634,9 @@ function esc(s) {
 
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
 
-// データ読み込み
-fetch(GAS_URL + '?page=api&action=books')
-  .then(function(r){ return r.json(); })
-  .then(function(res){
+// データ読み込み（JSONP方式でCORSを回避）
+function loadBooksJSONP() {
+  window._booksCallback = function(res) {
     document.getElementById("loading").style.display = "none";
     document.getElementById("shelf-container").style.display = "block";
     if (!res || res.status !== "ok") { renderEmpty("データの読み込みに失敗しました"); return; }
@@ -648,12 +647,17 @@ fetch(GAS_URL + '?page=api&action=books')
     }
     buildFilters();
     renderShelf(allBooks);
-  })
-  .catch(function(err){
+  };
+  var script = document.createElement('script');
+  script.src = GAS_URL + '?page=api&action=books&callback=_booksCallback';
+  script.onerror = function() {
     document.getElementById("loading").style.display = "none";
     document.getElementById("shelf-container").style.display = "block";
-    renderEmpty("読み込みエラー: " + err.message);
-  });
+    renderEmpty("読み込みエラーが発生しました");
+  };
+  document.head.appendChild(script);
+}
+loadBooksJSONP();
 
 function buildFilters() {
   var genres = {};
