@@ -199,7 +199,7 @@ body {
   font-size: .75rem;
   font-weight: 600;
   color: rgba(255,255,255,.92);
-  padding: 20% .15rem;
+  padding: 28px .15rem;
   letter-spacing: .16em;
   line-height: 1.4;
   overflow: hidden;
@@ -602,19 +602,20 @@ function renderShelf(books) {
       html += '<div class="book-item" onclick="openModal(' + globalIdx + ')">';
       // タイトルの長さに応じてフォントサイズを調整
       var titleLen = b.title.length;
+      var padPx = isMobile ? 28 : 34;
       var fontSize;
       if (isMobile) {
-        fontSize = titleLen <= 8  ? '.75rem'
-                 : titleLen <= 12 ? '.65rem'
-                 : titleLen <= 18 ? '.58rem'
-                 : '.50rem';
+        fontSize = titleLen <= 8  ? '.72rem'
+                 : titleLen <= 14 ? '.62rem'
+                 : titleLen <= 20 ? '.54rem'
+                 : '.48rem';
       } else {
-        fontSize = titleLen <= 10 ? '.75rem'
-                 : titleLen <= 16 ? '.65rem'
-                 : titleLen <= 22 ? '.58rem'
-                 : '.52rem';
+        fontSize = titleLen <= 10 ? '.72rem'
+                 : titleLen <= 18 ? '.62rem'
+                 : titleLen <= 26 ? '.56rem'
+                 : '.50rem';
       }
-      html += '<div class="book-spine ' + spineColor(b.title) + '" style="width:' + BOOK_W + 'px;height:' + spineH + 'px;font-size:' + fontSize + '">' + esc(b.title) + '</div>';
+      html += '<div class="book-spine ' + spineColor(b.title) + '" style="width:' + BOOK_W + 'px;height:' + spineH + 'px;font-size:' + fontSize + ';padding:' + padPx + 'px .15rem">' + esc(b.title) + '</div>';
       html += '</div>';
     });
     html += '</div>';
