@@ -213,13 +213,22 @@ body {
   background:
     linear-gradient(90deg, rgba(210,180,100,.18) 0%, rgba(210,180,100,.05) 4px, transparent 4px),
     linear-gradient(180deg,
-      rgba(0,0,0,.0) 0px, rgba(210,175,85,.55) 14px, rgba(235,200,110,.75) 15px,
-      rgba(210,175,85,.55) 16px, rgba(0,0,0,.0) 17px, rgba(200,165,75,.35) 21px,
-      rgba(200,165,75,.35) 22px, rgba(0,0,0,.0) 34px,
-      rgba(0,0,0,.0) calc(100% - 34px), rgba(200,165,75,.35) calc(100% - 22px),
-      rgba(200,165,75,.35) calc(100% - 21px), rgba(0,0,0,.0) calc(100% - 17px),
-      rgba(210,175,85,.55) calc(100% - 16px), rgba(235,200,110,.75) calc(100% - 15px),
-      rgba(210,175,85,.55) calc(100% - 14px), rgba(0,0,0,.0) 100%
+      rgba(0,0,0,.0)          0%,
+      rgba(210,175,85,.55)    8%,
+      rgba(235,200,110,.85)   8.5%,
+      rgba(210,175,85,.55)    9%,
+      rgba(0,0,0,.0)          9.5%,
+      rgba(200,165,75,.4)     11%,
+      rgba(200,165,75,.4)     11.5%,
+      rgba(0,0,0,.0)          12%,
+      rgba(0,0,0,.0)          88%,
+      rgba(200,165,75,.4)     88.5%,
+      rgba(200,165,75,.4)     89%,
+      rgba(0,0,0,.0)          89.5%,
+      rgba(210,175,85,.55)    91%,
+      rgba(235,200,110,.85)   91.5%,
+      rgba(210,175,85,.55)    92%,
+      rgba(0,0,0,.0)          100%
     );
   pointer-events: none;
 }
@@ -478,11 +487,8 @@ var BOOK_W   = isMobile ? 52 : 68;   // 背表紙幅
 var GAP      = 3;                     // 本と本の隙間
 var SHELF_SIZE = isMobile ? 6 : 7;   // 1棚の冊数
 
-// スマホ：棚板幅を固定（本がぴったり収まるサイズ）
-// PC   ：棚板は100%幅
-var SHELF_FIXED_W = isMobile
-  ? (SHELF_SIZE * BOOK_W + (SHELF_SIZE - 1) * GAP + 8)
-  : null;
+// 両方とも棚板幅を本がぴったり収まる幅に固定・中央揃え
+var SHELF_FIXED_W = SHELF_SIZE * BOOK_W + (SHELF_SIZE - 1) * GAP + 8;
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
@@ -580,8 +586,8 @@ function renderShelf(books) {
   var html = "";
   for (var i = 0; i < books.length; i += SHELF_SIZE) {
     var chunk = books.slice(i, i + SHELF_SIZE);
-    // 棚板幅：スマホは固定px、PCは100%
-    var shelfW = SHELF_FIXED_W ? 'width:' + SHELF_FIXED_W + 'px' : 'width:100%';
+    // 棚板幅：固定（PC・スマホ共通）
+    var shelfW = 'width:' + SHELF_FIXED_W + 'px';
     html += '<div class="shelf" style="' + shelfW + '">';
     html += '<div class="shelf-books">';
     chunk.forEach(function(b, idx){
