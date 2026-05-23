@@ -146,7 +146,7 @@ body {
   align-items: flex-end;
   gap: 3px;
   padding: .5rem .8rem 0;
-  min-height: 220px;
+  min-height: 230px;
   width: 100%;
   box-sizing: border-box;
   background: linear-gradient(180deg,
@@ -229,8 +229,8 @@ body {
 }
 
 .book-spine {
-  width: 68px;
-  min-width: 68px;
+  width: 52px;
+  min-width: 52px;
   flex-shrink: 0;
   border-radius: 2px 3px 3px 2px;
   display: flex;
@@ -615,7 +615,7 @@ body {
 var allBooks = [];
 var currentGenre = "";
 var SHELF_W = Math.min(window.innerWidth - 8, 560);
-var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - 16) / (68 + 3)));
+var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - 16) / (52 + 3)));
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
@@ -744,7 +744,7 @@ function renderShelf(books) {
       // 本の高さにランダムな変化（タイトルのハッシュから決定論的に）
       var h = 0;
       for (var ci = 0; ci < b.title.length; ci++) h = (h * 31 + b.title.charCodeAt(ci)) & 0xffff;
-      var spineH = 140 + (h % 40); // 140〜179px
+      var spineH = 160 + (h % 50); // 160〜209px（縦長でスリムな背表紙）
       var coverH = Math.round(spineH * 0.74);
       html += '<div class="book-item" onclick="openModal(' + globalIdx + ')">';
       html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px">' + esc(b.title) + '</div>';
