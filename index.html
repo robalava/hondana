@@ -623,6 +623,17 @@ var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65
 document.getElementById('form-link').href   = GAS_URL + '?page=form';
 document.getElementById('manage-link').href = './manage.html';
 
+var SPINE_COLORS = ['bc-0','bc-1','bc-2','bc-3','bc-4','bc-5','bc-6','bc-7'];
+function spineColor(str) {
+  var h = 0;
+  for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) & 0xffff;
+  return SPINE_COLORS[h % SPINE_COLORS.length];
+}
+
+function esc(s) {
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
 // CSVをパース
 function parseCSV(text) {
   var lines = text.split('\n');
