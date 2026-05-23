@@ -326,9 +326,67 @@ body {
   font-size: .9rem;
   letter-spacing: .08em;
 }
+
+/* カスタムダイアログ */
+.custom-dialog-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.custom-dialog-overlay.open { display: flex; }
+.custom-dialog {
+  background: #fdf8f0;
+  border-radius: 8px;
+  padding: 1.6rem 1.4rem 1.2rem;
+  max-width: 320px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+  text-align: center;
+}
+.custom-dialog-msg {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .9rem;
+  color: #2c1f14;
+  margin-bottom: 1.2rem;
+  line-height: 1.6;
+}
+.custom-dialog-btns { display: flex; gap: .6rem; justify-content: center; }
+.custom-dialog-ok {
+  padding: .5rem 1.6rem;
+  background: #5c4a38;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .85rem;
+  cursor: pointer;
+}
+.custom-dialog-cancel {
+  padding: .5rem 1.2rem;
+  background: transparent;
+  color: #5c4a38;
+  border: 1px solid #9c8878;
+  border-radius: 4px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .85rem;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
+
+<!-- カスタムダイアログ -->
+<div class="custom-dialog-overlay" id="custom-dialog-overlay">
+  <div class="custom-dialog">
+    <div class="custom-dialog-msg" id="custom-dialog-msg"></div>
+    <div class="custom-dialog-btns" id="custom-dialog-btns"></div>
+  </div>
+</div>
 <div class="page-wrap">
 
   <div style="text-align:right;margin-bottom:.8rem;">
@@ -414,6 +472,31 @@ body {
 </div>
 
 <script>
+function showAlert(msg, callback) {
+  document.getElementById('custom-dialog-msg').textContent = msg;
+  var btns = document.getElementById('custom-dialog-btns');
+  btns.innerHTML = '<button class="custom-dialog-ok">OK</button>';
+  document.getElementById('custom-dialog-overlay').classList.add('open');
+  btns.querySelector('.custom-dialog-ok').onclick = function() {
+    document.getElementById('custom-dialog-overlay').classList.remove('open');
+    if (callback) callback();
+  };
+}
+
+function showConfirm(msg, callback) {
+  document.getElementById('custom-dialog-msg').textContent = msg;
+  var btns = document.getElementById('custom-dialog-btns');
+  btns.innerHTML = '<button class="custom-dialog-cancel">キャンセル</button><button class="custom-dialog-ok">外す</button>';
+  document.getElementById('custom-dialog-overlay').classList.add('open');
+  btns.querySelector('.custom-dialog-cancel').onclick = function() {
+    document.getElementById('custom-dialog-overlay').classList.remove('open');
+  };
+  btns.querySelector('.custom-dialog-ok').onclick = function() {
+    document.getElementById('custom-dialog-overlay').classList.remove('open');
+    callback();
+  };
+}
+
 var currentId = "";
 var myBooks = [];
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
@@ -525,8 +608,8 @@ function saveEdit() {
     genre:     document.getElementById("edit-genre").value,
     comment:   document.getElementById("edit-comment").value.trim()
   };
-  if (!data.title)   { alert("タイトルを入力してください。"); return; }
-  if (!data.comment) { alert("コメントを入力してください。"); return; }
+  if (!data.title)   { showAlert("タイトルを入力してください。"); return; }
+  if (!data.comment) { showAlert("コメントを入力してください。"); return; }
 
   var btn = document.getElementById("btn-save");
   btn.disabled = true; btn.textContent = "保存中…";
@@ -538,29 +621,29 @@ function saveEdit() {
         closeModal();
         loadMyBooks();
       } else {
-        alert("エラー: " + (res.message || "不明なエラー"));
+        showAlert("エラー: " + (res.message || "不明なエラー"));
       }
     })
     .catch(function(err){
       btn.disabled = false; btn.textContent = "保存する";
-      alert("通信エラー: " + err.message);
+      showAlert("通信エラー: " + err.message);
     });
 }
 
 function deleteBook(bookId) {
-  if (!confirm("この本を棚から外しますか？")) return;
-
-  gasPost({ action: "deleteBook", shopkeeper_id: currentId, bookId: bookId })
-    .then(function(res){
-      if (res.status === "ok") {
-        loadMyBooks();
-      } else {
-        alert("エラー: " + (res.message || "不明なエラー"));
-      }
-    })
-    .catch(function(err){
-      alert("通信エラー: " + err.message);
-    });
+  showConfirm("この本を棚から外しますか？", function() {
+    gasPost({ action: "deleteBook", shopkeeper_id: currentId, bookId: bookId })
+      .then(function(res){
+        if (res.status === "ok") {
+          loadMyBooks();
+        } else {
+          showAlert("エラー: " + (res.message || "不明なエラー"));
+        }
+      })
+      .catch(function(err){
+        showAlert("通信エラー: " + err.message);
+      });
+  });
 }
 
 function showStatus(msg, isErr) {
