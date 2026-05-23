@@ -157,7 +157,6 @@ body {
   );
   border-radius: 3px 3px 0 0;
   flex-wrap: nowrap;
-  overflow: hidden;
   position: relative;
 }
 .shelf-books::after {
@@ -213,10 +212,10 @@ body {
 
 /* 本 */
 .book-item {
-  flex-shrink: 0; /* 縮まない */
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   cursor: pointer;
   transition: transform .25s cubic-bezier(.34,1.56,.64,1), filter .25s;
   transform-origin: bottom center;
