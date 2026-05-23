@@ -160,7 +160,6 @@ body {
   flex-wrap: nowrap;
   overflow: hidden;
   position: relative;
-  justify-content: flex-start;
 }
 .shelf-books::after {
   content: '';
@@ -614,7 +613,7 @@ body {
 <script>
 var allBooks = [];
 var currentGenre = "";
-var SHELF_SIZE = 7;
+var SHELF_SIZE = Math.max(3, Math.floor((Math.min(window.innerWidth, 560) - 32) / (68 + 3)));
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
