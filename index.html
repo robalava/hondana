@@ -103,7 +103,7 @@ body {
 /* 本棚コンテナ */
 .shelves-wrap {
   flex: 1;
-  padding: 1rem 1rem 3rem;
+  padding: 2rem 1rem 3rem;
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -114,7 +114,7 @@ body {
 
 /* 棚 */
 .shelf {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   position: relative;
   width: 100%;
 }
@@ -486,11 +486,9 @@ var currentGenre = "";
 
 // PC/スマホ完全分離
 var isMobile = window.innerWidth <= 500;
-var BOOK_W   = isMobile ? 52 : 68;   // 背表紙幅
-var GAP      = 3;                     // 本と本の隙間
-var SHELF_SIZE = isMobile ? 6 : 7;   // 1棚の冊数
-
-// 両方とも棚板幅を本がぴったり収まる幅に固定・中央揃え
+var BOOK_W   = isMobile ? 52 : 68;
+var GAP      = 3;
+var SHELF_SIZE = isMobile ? 6 : 7;
 var SHELF_FIXED_W = SHELF_SIZE * BOOK_W + (SHELF_SIZE - 1) * GAP + 8;
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
@@ -597,7 +595,9 @@ function renderShelf(books) {
       var globalIdx = i + idx;
       var h = 0;
       for (var ci = 0; ci < b.title.length; ci++) h = (h * 31 + b.title.charCodeAt(ci)) & 0xffff;
-      var spineH = 160 + (h % 50); // 160〜209px
+      var spineH = isMobile
+        ? 160 + (h % 50)   // スマホ：160〜209px
+        : 200 + (h % 60);  // PC：200〜259px（より縦長に）
       // 背表紙幅はBOOK_Wをinlineで指定（CSSの固定値に依存しない）
       html += '<div class="book-item" onclick="openModal(' + globalIdx + ')">';
       html += '<div class="book-spine ' + spineColor(b.title) + '" style="width:' + BOOK_W + 'px;height:' + spineH + 'px">' + esc(b.title) + '</div>';
