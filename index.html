@@ -674,13 +674,22 @@ function splitCSVLine(line) {
   return cols;
 }
 
-// データ読み込み
-fetch(SHEET_CSV_URL)
+// データ読み込み - GAS経由でCORSを回避
+var GAS_API = GAS_URL + '?page=api&action=books';
+
+fetch(GAS_API)
   .then(function(r){ return r.text(); })
-  .then(function(csv){
+  .then(function(text){
+    // JSONPレスポンスの場合はコールバック部分を除去
+    var json = text.trim();
+    if (json.indexOf('_booksCallback(') === 0) {
+      json = json.slice('_booksCallback('.length, -1);
+    }
+    var res = JSON.parse(json);
     document.getElementById("loading").style.display = "none";
     document.getElementById("shelf-container").style.display = "block";
-    allBooks = parseCSV(csv);
+    if (!res || res.status !== "ok") { renderEmpty("データの読み込みに失敗しました"); return; }
+    allBooks = res.books || [];
     if (allBooks.length === 0) {
       renderEmpty("まだ棚が空です。最初の一冊を並べてみましょう。");
       return;
@@ -688,10 +697,23 @@ fetch(SHEET_CSV_URL)
     buildFilters();
     renderShelf(allBooks);
   })
-  .catch(function(err){
-    document.getElementById("loading").style.display = "none";
-    document.getElementById("shelf-container").style.display = "block";
-    renderEmpty("読み込みエラー: " + err.message);
+  .catch(function(){
+    // fetchが失敗した場合はCSVにフォールバック
+    fetch(SHEET_CSV_URL)
+      .then(function(r){ return r.text(); })
+      .then(function(csv){
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("shelf-container").style.display = "block";
+        allBooks = parseCSV(csv);
+        if (allBooks.length === 0) { renderEmpty("まだ棚が空です。最初の一冊を並べてみましょう。"); return; }
+        buildFilters();
+        renderShelf(allBooks);
+      })
+      .catch(function(err){
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("shelf-container").style.display = "block";
+        renderEmpty("読み込みエラー: " + err.message);
+      });
   });
 
 function buildFilters() {
