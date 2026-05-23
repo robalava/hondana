@@ -637,8 +637,8 @@ function openModal(idx) {
   var top = document.getElementById("modal-top");
   var body = document.getElementById("modal-body");
   var rakutenUrl = b.isbn
-    ? "https://books.rakuten.co.jp/search?sty=1&g=001&sitem=" + encodeURIComponent(b.isbn)
-    : "https://books.rakuten.co.jp/search?k=" + encodeURIComponent(b.title) + "&g=001";
+    ? "https://www.amazon.co.jp/dp/" + b.isbn
+    : "https://www.amazon.co.jp/s?k=" + encodeURIComponent(b.title) + "&i=stripbooks";
   var coverHtml = b.cover
     ? '<a href="' + rakutenUrl + '" target="_blank"><img class="modal-cover" src="' + esc(b.cover) + '" alt="表紙"></a>'
     : '<div class="modal-cover-ph">表紙なし</div>';
@@ -654,7 +654,7 @@ function openModal(idx) {
   body.innerHTML =
     '<div class="modal-from">棚主：<span class="from-name">' + esc(b.nickname) + '</span> さんの推薦</div>' +
     '<div class="modal-comment">' + esc(b.comment).replace(/\n/g,'<br>') + '</div>' +
-    '<a href="' + rakutenUrl + '" target="_blank" style="display:block;margin-top:1rem;text-align:center;font-size:.75rem;color:var(--gold);text-decoration:underline;">楽天ブックスでこの本を探す ↗</a>';
+    '<a href="' + rakutenUrl + '" target="_blank" style="display:block;margin-top:1rem;text-align:center;font-size:.75rem;color:var(--gold);text-decoration:underline;">Amazonでこの本を探す ↗</a>';
   document.getElementById("modal-overlay").classList.add("open");
 }
 
