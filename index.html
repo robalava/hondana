@@ -137,14 +137,15 @@ body {
 .shelf {
   margin-bottom: 2rem;
   position: relative;
-  width: 100%; /* PCはデフォルトで全幅 */
+  width: 100%;
 }
 
 /* 本の並び */
 .shelf-books {
   display: flex;
   align-items: flex-end;
-  gap: 2px;
+  gap: 3px;
+  padding: .5rem .4rem 0;
   min-height: 230px;
   width: 100%;
   box-sizing: border-box;
@@ -229,7 +230,7 @@ body {
 
 .book-spine {
   width: 52px;
-  min-width: 52px;
+  min-width: 0;
   flex-shrink: 0;
   border-radius: 2px 3px 3px 2px;
   display: flex;
@@ -572,7 +573,7 @@ body {
 
 <header class="site-header">
   <div class="site-title">馬 蹄 通 り 書 店</div>
-  <div class="site-subtitle">A shared bookshelf for fellow readers</div>
+  <div class="site-subtitle">the things that shape your world</div>
   <div class="header-divider"></div>
 </header>
 
@@ -614,21 +615,11 @@ body {
 var allBooks = [];
 var currentGenre = "";
 var isMobile = window.innerWidth <= 500;
-
-// PC: 68px幅・gap3px・棚板100%幅
-// スマホ: 52px幅・gap2px・棚板固定幅（5冊分）で中央揃え
-var BOOK_W, GAP, SHELF_SIZE, EXACT_SHELF_W;
-if (isMobile) {
-  BOOK_W = 52;
-  GAP = 2;
-  SHELF_SIZE = 5; // スマホは5冊固定
-  EXACT_SHELF_W = SHELF_SIZE * BOOK_W + (SHELF_SIZE - 1) * GAP + 8; // 268px固定
-} else {
-  BOOK_W = 68;
-  GAP = 3;
-  SHELF_SIZE = 7; // PCは7冊固定
-  EXACT_SHELF_W = null; // PCは100%幅
-}
+var BOOK_W = isMobile ? 52 : 68;
+var GAP = 3;
+var SHELF_SIZE = isMobile ? 6 : 7;
+// スマホは棚板幅を本がぴったり収まる幅に固定、PCはnull（100%幅）
+var EXACT_SHELF_W = isMobile ? (6 * BOOK_W + 5 * GAP + 8) : null;
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
