@@ -123,7 +123,7 @@ body {
 /* ---- 本棚コンテナ ---- */
 .shelves-wrap {
   flex: 1;
-  padding: 2rem 1rem 4rem;
+  padding: 1rem 1rem 3rem;
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -134,7 +134,7 @@ body {
 
 /* 棚（木製レイアウト） */
 .shelf {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   position: relative;
   width: 100%;
 }
@@ -144,8 +144,8 @@ body {
   display: flex;
   align-items: flex-end;
   gap: 3px;
-  padding: 1rem .8rem 0;
-  min-height: 280px;
+  padding: .5rem .8rem 0;
+  min-height: 220px;
   width: 100%;
   box-sizing: border-box;
   background: linear-gradient(180deg,
@@ -500,7 +500,7 @@ body {
 .site-footer {
   background: #b8a88a;
   border-top: 1px solid #9a8a68;
-  padding: 1.5rem;
+  padding: .8rem 1rem;
   text-align: center;
   position: sticky;
   bottom: 0;
@@ -508,46 +508,46 @@ body {
 }
 .footer-btns {
   display: flex;
-  gap: .8rem;
+  gap: .5rem;
   justify-content: center;
   flex-wrap: wrap;
 }
 .footer-add-btn {
   display: inline-block;
-  padding: .7rem 1.8rem;
+  padding: .5rem 1.2rem;
   background: var(--ink2);
   color: var(--paper);
   border: none;
   border-radius: 4px;
   font-family: 'Shippori Mincho', serif;
-  font-size: .9rem;
+  font-size: .82rem;
   font-weight: 600;
-  letter-spacing: .1em;
+  letter-spacing: .08em;
   cursor: pointer;
   text-decoration: none;
   transition: background .2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
 }
 .footer-add-btn:hover { background: var(--ink); }
 .footer-manage-btn {
   display: inline-block;
-  padding: .7rem 1.8rem;
+  padding: .5rem 1.2rem;
   background: transparent;
   color: var(--ink2);
   border: 1px solid var(--ink3);
   border-radius: 4px;
   font-family: 'Shippori Mincho', serif;
-  font-size: .9rem;
+  font-size: .82rem;
   font-weight: 600;
-  letter-spacing: .1em;
+  letter-spacing: .08em;
   cursor: pointer;
   text-decoration: none;
   transition: all .2s;
 }
 .footer-manage-btn:hover { background: rgba(38,28,16,.08); border-color: var(--ink2); }
 .footer-note {
-  margin-top: .8rem;
-  font-size: .7rem;
+  margin-top: .4rem;
+  font-size: .65rem;
   color: var(--ink3);
 }
 .loading {
@@ -743,7 +743,7 @@ function renderShelf(books) {
       // 本の高さにランダムな変化（タイトルのハッシュから決定論的に）
       var h = 0;
       for (var ci = 0; ci < b.title.length; ci++) h = (h * 31 + b.title.charCodeAt(ci)) & 0xffff;
-      var spineH = 170 + (h % 40); // 170〜209px（表紙画像200pxより少し低め）
+      var spineH = 140 + (h % 40); // 140〜179px
       var coverH = Math.round(spineH * 0.74);
       html += '<div class="book-item" onclick="openModal(' + globalIdx + ')">';
       html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px">' + esc(b.title) + '</div>';
