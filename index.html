@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>馬蹄通り書店</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --wood:       #9a8a68;
+  --wood2:      #b8a88a;
+  --wood3:      #c8b49a;
+  --wood-light: #d4c8a8;
+  --paper:      #f0ebe0;
+  --paper2:     #e2dbd0;
+  --ink:        #261c10;
+  --ink2:       #5a4430;
+  --ink3:       #8a7a68;
+  --red:        #7a3828;
+  --gold:       #9a8a68;
+  --shadow:     rgba(38,28,16,0.15);
+  --shadow2:    rgba(38,28,16,0.07);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #d8d2c6;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 60px),
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.025) 0, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 60px);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--ink);
+}
+
+/* ---- ヘッダー ---- */
+.site-header {
+  background: linear-gradient(180deg, #8a7858 0%, #a89878 40%, #b8a88a 100%);
+  border-bottom: 1px solid #7a6848;
+  padding: 2.5rem 1.5rem 2rem;
+  text-align: center;
+  position: relative;
+}
+.site-header::before,
+.site-header::after {
+  content: '';
+  display: block;
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+  margin: 0 auto;
+}
+.site-header::before { margin-bottom: 1.2rem; }
+.site-header::after  { margin-top: 1.2rem; }
+
+.site-title {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f4ece0;
+  letter-spacing: .3em;
+  margin-bottom: .5rem;
+  text-shadow: 0 1px 4px rgba(0,0,0,.25);
+}
+.site-subtitle {
+  font-size: .7rem;
+  color: rgba(244,236,224,.65);
+  letter-spacing: .25em;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+.header-divider { display: none; }
+
+/* ---- フィルターバー ---- */
+.filter-bar {
+  background: #ccc4b4;
+  padding: .8rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(154,138,104,.35);
+}
+.filter-bar-inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 440px;
+  max-width: calc(100vw - 2rem);
+}
+.filter-label {
+  font-size: .72rem;
+  color: var(--ink3);
+  letter-spacing: .08em;
+  white-space: nowrap;
+}
+.filter-btns {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  background: transparent;
+  border: 1px solid rgba(154,138,104,.6);
+  border-radius: 3px;
+  padding: .3rem .75rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .72rem;
+  color: var(--ink2);
+  cursor: pointer;
+  transition: all .18s;
+}
+.filter-btn:hover,
+.filter-btn.active {
+  background: var(--wood2);
+  border-color: var(--wood);
+  color: var(--ink);
+}
+
+/* ---- 本棚コンテナ ---- */
+.shelves-wrap {
+  flex: 1;
+  padding: 2rem 1rem 4rem;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #b8b0a0;
+}
+
+/* 棚（木製レイアウト） */
+.shelf {
+  margin-bottom: 3rem;
+  position: relative;
+  width: 560px;
+  max-width: 100%;
+}
+
+/* 本の並び */
+.shelf-books {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  padding: 1rem .8rem 0;
+  min-height: 280px;
+  width: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(180deg,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0) 55%,
+    rgba(0,0,0,0.18) 85%,
+    rgba(0,0,0,0.28) 100%
+  );
+  border-radius: 3px 3px 0 0;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  position: relative;
+  justify-content: flex-start;
+}
+.shelf-books::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 18px;
+  background: linear-gradient(180deg,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0.22) 100%
+  );
+  pointer-events: none;
+}
+
+/* 木の棚板 */
+.shelf-board {
+  height: 20px;
+  width: 100%;
+  background: linear-gradient(180deg,
+    #c0aa88 0%,
+    #a08868 25%,
+    #886848 60%,
+    #604830 100%
+  );
+  border-radius: 1px;
+  box-shadow:
+    0 8px 20px rgba(38,28,16,.45),
+    0 3px 6px rgba(38,28,16,.3),
+    inset 0 1px 0 rgba(255,255,255,.2);
+  position: relative;
+}
+.shelf-board::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg,
+    rgba(255,255,255,.04),
+    rgba(255,255,255,.16) 30%,
+    rgba(255,255,255,.20) 50%,
+    rgba(255,255,255,.16) 70%,
+    rgba(255,255,255,.04)
+  );
+}
+.shelf-board::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 6px;
+  background: rgba(0,0,0,.15);
+  border-radius: 0 0 1px 1px;
+}
+
+/* 本 */
+.book-item {
+  flex-shrink: 0; /* 縮まない */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1), filter .25s;
+  transform-origin: bottom center;
+  filter: brightness(.95);
+}
+.book-item:hover {
+  transform: translateY(-14px);
+  filter: brightness(1.05);
+  z-index: 10;
+  position: relative;
+}
+
+.book-spine {
+  width: 68px;
+  min-width: 68px;
+  flex-shrink: 0;
+  border-radius: 2px 3px 3px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  font-family: 'Shippori Mincho', serif;
+  font-size: .75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.92);
+  padding: 2rem .2rem;
+  letter-spacing: .16em;
+  line-height: 1.4;
+  overflow: hidden;
+  box-shadow:
+    inset -4px 0 8px rgba(0,0,0,.3),
+    inset 3px 0 4px rgba(255,255,255,.07),
+    3px 0 8px rgba(0,0,0,.25);
+  position: relative;
+}
+
+/* アンティーク背表紙：くすんだ金色の繊細なライン */
+.book-spine::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    /* 左端のごく細い光沢 */
+    linear-gradient(90deg, rgba(210,180,100,.18) 0%, rgba(210,180,100,.05) 4px, transparent 4px),
+    /* 上の細いライン×2本（くすんだ金色） */
+    linear-gradient(180deg,
+      rgba(0,0,0,.0)            0px,
+      rgba(180,148,60,.0)       13px,
+      rgba(210,175,85,.55)      14px,
+      rgba(235,200,110,.75)     15px,
+      rgba(210,175,85,.55)      16px,
+      rgba(180,148,60,.0)       17px,
+      rgba(0,0,0,.0)            20px,
+      rgba(180,148,60,.0)       20px,
+      rgba(200,165,75,.35)      21px,
+      rgba(200,165,75,.35)      22px,
+      rgba(180,148,60,.0)       23px,
+      rgba(0,0,0,.0)            34px,
+      /* 下の細いライン×2本 */
+      rgba(0,0,0,.0)            calc(100% - 34px),
+      rgba(180,148,60,.0)       calc(100% - 23px),
+      rgba(200,165,75,.35)      calc(100% - 22px),
+      rgba(200,165,75,.35)      calc(100% - 21px),
+      rgba(180,148,60,.0)       calc(100% - 20px),
+      rgba(0,0,0,.0)            calc(100% - 17px),
+      rgba(210,175,85,.55)      calc(100% - 16px),
+      rgba(235,200,110,.75)     calc(100% - 15px),
+      rgba(210,175,85,.55)      calc(100% - 14px),
+      rgba(180,148,60,.0)       calc(100% - 13px),
+      rgba(0,0,0,.0)            100%
+    );
+  pointer-events: none;
+}
+
+/* ごく薄い縦テクスチャ（布目のような） */
+.book-spine::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255,255,255,.0)   0px,
+    rgba(255,255,255,.0)   3px,
+    rgba(255,255,255,.015) 3px,
+    rgba(255,255,255,.015) 4px
+  );
+  pointer-events: none;
+}
+
+.book-cover-img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 1px 4px 4px 1px;
+  box-shadow:
+    3px 4px 12px rgba(38,28,16,.35),
+    inset -2px 0 4px rgba(0,0,0,.2);
+  display: block;
+}
+
+/* 本の色 */
+.bc-0 { background: linear-gradient(160deg, #6a7a5a 0%, #4e5e44 100%); }
+.bc-1 { background: linear-gradient(160deg, #7a6050 0%, #5e4438 100%); }
+.bc-2 { background: linear-gradient(160deg, #506070 0%, #384858 100%); }
+.bc-3 { background: linear-gradient(160deg, #685870 0%, #4e4056 100%); }
+.bc-4 { background: linear-gradient(160deg, #706848 0%, #564e34 100%); }
+.bc-5 { background: linear-gradient(160deg, #506860 0%, #384e48 100%); }
+.bc-6 { background: linear-gradient(160deg, #785850 0%, #5c403a 100%); }
+.bc-7 { background: linear-gradient(160deg, #586858 0%, #405040 100%); }
+
+/* ---- モーダル ---- */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(20,14,8,.75);
+  backdrop-filter: blur(3px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--paper);
+  border-radius: 10px;
+  max-width: 460px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 32px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
+  animation: modal-in .22s cubic-bezier(.34,1.2,.64,1);
+}
+@keyframes modal-in {
+  from { opacity:0; transform: translateY(24px) scale(.96); }
+  to   { opacity:1; transform: none; }
+}
+
+.modal-top {
+  background: linear-gradient(160deg, #c4b49a 0%, #a89878 100%);
+  padding: 1.6rem;
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  overflow: hidden;
+}
+.modal-top::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.modal-cover {
+  width: 78px;
+  min-width: 78px;
+  height: 112px;
+  object-fit: cover;
+  border-radius: 2px 5px 5px 2px;
+  box-shadow: 4px 6px 16px rgba(0,0,0,.45), inset -2px 0 4px rgba(0,0,0,.2);
+}
+.modal-cover-ph {
+  width: 78px;
+  min-width: 78px;
+  height: 112px;
+  background: rgba(0,0,0,.15);
+  border-radius: 2px 5px 5px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .62rem;
+  color: rgba(255,255,255,.5);
+  letter-spacing: .06em;
+}
+.modal-header-info { flex: 1; padding-top: .2rem; }
+.modal-title {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #faf4e8;
+  line-height: 1.6;
+  margin-bottom: .4rem;
+  text-shadow: 0 1px 3px rgba(0,0,0,.3);
+}
+.modal-author {
+  font-size: .78rem;
+  color: rgba(250,244,232,.78);
+  margin-bottom: .15rem;
+}
+.modal-pub {
+  font-size: .7rem;
+  color: rgba(250,244,232,.55);
+}
+.modal-genre-tag {
+  display: inline-block;
+  margin-top: .6rem;
+  padding: .2rem .65rem;
+  background: rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 20px;
+  font-size: .65rem;
+  color: rgba(250,244,232,.75);
+  letter-spacing: .06em;
+}
+
+.modal-body {
+  padding: 1.4rem 1.6rem 1.2rem;
+}
+.modal-from {
+  font-size: .72rem;
+  color: var(--ink3);
+  margin-bottom: .9rem;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  padding-bottom: .8rem;
+  border-bottom: 1px solid rgba(154,138,104,.2);
+}
+.from-name {
+  font-family: 'Shippori Mincho', serif;
+  font-weight: 600;
+  color: var(--ink2);
+  font-size: .88rem;
+}
+.modal-comment {
+  font-size: .88rem;
+  line-height: 2;
+  color: var(--ink);
+  border-left: 2px solid var(--gold);
+  padding: .7rem 1rem;
+  background: rgba(154,138,104,.08);
+  border-radius: 0 5px 5px 0;
+}
+.modal-close {
+  display: block;
+  width: 100%;
+  padding: .85rem;
+  border: none;
+  border-top: 1px solid rgba(154,138,104,.2);
+  background: transparent;
+  font-family: 'Shippori Mincho', serif;
+  font-size: .8rem;
+  color: var(--ink3);
+  cursor: pointer;
+  transition: background .18s, color .18s;
+  border-radius: 0 0 10px 10px;
+  letter-spacing: .1em;
+}
+.modal-close:hover { background: var(--paper2); color: var(--ink2); }
+.modal-close {
+  display: block;
+  width: 100%;
+  padding: .7rem;
+  border: none;
+  border-top: 1px solid var(--border, #d4c4b0);
+  background: transparent;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .8rem;
+  color: var(--ink3);
+  cursor: pointer;
+  transition: background .18s;
+  border-radius: 0 0 8px 8px;
+}
+.modal-close:hover { background: var(--paper2); }
+
+/* ---- 空の状態 ---- */
+.empty-shelf {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--ink3);
+  opacity: .7;
+}
+.empty-shelf-icon { font-size: 3rem; margin-bottom: 1rem; }
+.empty-shelf-text { font-family: 'Shippori Mincho', serif; font-size: 1rem; letter-spacing: .1em; }
+
+/* ---- フッター ---- */
+.site-footer {
+  background: #b8a88a;
+  border-top: 1px solid #9a8a68;
+  padding: 1.5rem;
+  text-align: center;
+  position: sticky;
+  bottom: 0;
+  z-index: 50;
+}
+.footer-btns {
+  display: flex;
+  gap: .8rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.footer-add-btn {
+  display: inline-block;
+  padding: .7rem 1.8rem;
+  background: var(--ink2);
+  color: var(--paper);
+  border: none;
+  border-radius: 4px;
+  font-family: 'Shippori Mincho', serif;
+  font-size: .9rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.footer-add-btn:hover { background: var(--ink); }
+.footer-manage-btn {
+  display: inline-block;
+  padding: .7rem 1.8rem;
+  background: transparent;
+  color: var(--ink2);
+  border: 1px solid var(--ink3);
+  border-radius: 4px;
+  font-family: 'Shippori Mincho', serif;
+  font-size: .9rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .2s;
+}
+.footer-manage-btn:hover { background: rgba(38,28,16,.08); border-color: var(--ink2); }
+.footer-note {
+  margin-top: .8rem;
+  font-size: .7rem;
+  color: var(--ink3);
+}
+.loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--ink2);
+  font-family: 'Shippori Mincho', serif;
+  letter-spacing: .1em;
+  opacity: .6;
+}
+
+@media (max-width: 480px) {
+  .book-cover-img { width: 76px; height: 110px; }
+  .book-spine { width: 52px; font-size: .75rem; }
+  .shelves-wrap { padding: 1.5rem .5rem 4rem; }
+  .shelf { width: calc(100vw - 1rem) !important; }
+  .shelf-books { gap: 3px; padding: .8rem .5rem 0; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-title">馬 蹄 通 り 書 店</div>
+  <div class="site-subtitle">A shared bookshelf for fellow readers</div>
+  <div class="header-divider"></div>
+</header>
+
+<!-- フィルター -->
+<div class="filter-bar">
+  <div class="filter-bar-inner">
+    <span class="filter-label">絞り込み：</span>
+    <div class="filter-btns" id="filter-btns">
+      <button class="filter-btn active" data-genre="">すべて</button>
+    </div>
+  </div>
+</div>
+
+<!-- 本棚 -->
+<div class="shelves-wrap">
+  <div class="loading" id="loading">棚を整えています…</div>
+  <div id="shelf-container" style="display:none;"></div>
+</div>
+
+<!-- モーダル -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-top" id="modal-top"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <button class="modal-close" onclick="closeModal()">とじる</button>
+  </div>
+</div>
+
+<!-- フッター -->
+<footer class="site-footer">
+  <div class="footer-btns">
+    <a id="form-link" href="#" class="footer-add-btn">＋ 棚に本を並べる</a>
+    <a id="manage-link" href="#" class="footer-manage-btn">📋 自分の棚を見る</a>
+  </div>
+  <div class="footer-note">書店員IDがあれば登録・棚を直す・棚から外すができます</div>
+</footer>
+
+<script>
+var allBooks = [];
+var currentGenre = "";
+var SHELF_SIZE = 7;
+
+// フォーム・管理URLを設定
+var baseUrl = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
+document.getElementById('form-link').href   = baseUrl + '?page=form';
+document.getElementById('manage-link').href = baseUrl + '?page=manage';
+
+var SPINE_COLORS = ['bc-0','bc-1','bc-2','bc-3','bc-4','bc-5','bc-6','bc-7'];
+function spineColor(str) {
+  var h = 0;
+  for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) & 0xffff;
+  return SPINE_COLORS[h % SPINE_COLORS.length];
+}
+
+function esc(s) {
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// 棚の幅をコンテナ実幅に合わせて設定
+function adjustShelfWidth() {
+  var wrap = document.querySelector('.shelves-wrap');
+  if (!wrap) return;
+  var available = wrap.clientWidth - 32; // padding分を引く
+  var targetW = Math.min(available, 440);
+  var shelves = document.querySelectorAll('.shelf');
+  shelves.forEach(function(s) { s.style.width = targetW + 'px'; });
+}
+window.addEventListener('load', adjustShelfWidth);
+window.addEventListener('resize', adjustShelfWidth);
+
+// データ読み込み
+google.script.run
+  .withSuccessHandler(function(res){
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("shelf-container").style.display = "block";
+    if (!res || res.status !== "ok") { renderEmpty("データの読み込みに失敗しました"); return; }
+    allBooks = res.books || [];
+    if (allBooks.length === 0) {
+      renderEmpty("まだ棚が空です。最初の一冊を並べてみましょう。");
+      return;
+    }
+    buildFilters();
+    renderShelf(allBooks);
+  })
+  .withFailureHandler(function(err){
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("shelf-container").style.display = "block";
+    renderEmpty("読み込みエラー: " + err.message);
+  })
+  .fetchAllBooks();
+
+function buildFilters() {
+  var genres = {};
+  allBooks.forEach(function(b){ if (b.genre) genres[b.genre] = true; });
+  var bar = document.getElementById("filter-btns");
+  Object.keys(genres).sort().forEach(function(g){
+    var btn = document.createElement("button");
+    btn.className = "filter-btn";
+    btn.dataset.genre = g;
+    btn.textContent = g;
+    btn.addEventListener("click", function(){ filterBy(g, btn); });
+    bar.appendChild(btn);
+  });
+  // すべてボタンにイベント
+  bar.querySelector('[data-genre=""]').addEventListener("click", function(){ filterBy("", this); });
+}
+
+function filterBy(genre, el) {
+  currentGenre = genre;
+  document.querySelectorAll(".filter-btn").forEach(function(b){ b.classList.remove("active"); });
+  el.classList.add("active");
+  var filtered = genre ? allBooks.filter(function(b){ return b.genre === genre; }) : allBooks;
+  renderShelf(filtered);
+}
+
+function renderShelf(books) {
+  var container = document.getElementById("shelf-container");
+  if (!books.length) { renderEmpty(); return; }
+
+  // 現在表示中の本をグローバルに保持
+  window._displayedBooks = books;
+
+  var html = "";
+  for (var i = 0; i < books.length; i += SHELF_SIZE) {
+    var chunk = books.slice(i, i + SHELF_SIZE);
+    var shelfNum = Math.floor(i / SHELF_SIZE) + 1;
+    html += '<div class="shelf">';
+    html += '<div class="shelf-books">';
+    chunk.forEach(function(b, idx){
+      var globalIdx = i + idx;
+      // 本の高さにランダムな変化（タイトルのハッシュから決定論的に）
+      var h = 0;
+      for (var ci = 0; ci < b.title.length; ci++) h = (h * 31 + b.title.charCodeAt(ci)) & 0xffff;
+      var spineH = 180 + (h % 60); // 180〜239px
+      var coverH = Math.round(spineH * 0.74);
+      html += '<div class="book-item" onclick="openModal(' + globalIdx + ')">';
+      if (b.cover) {
+        html += '<img class="book-cover-img" src="' + esc(b.cover) + '" alt="' + esc(b.title) + '" loading="lazy" style="height:' + coverH + 'px" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
+        html += '<div class="book-spine ' + spineColor(b.title) + '" style="display:none;height:' + spineH + 'px">' + esc(b.title) + '</div>';
+      } else {
+        html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px">' + esc(b.title) + '</div>';
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '<div class="shelf-board"></div>';
+    html += '</div>';
+  }
+  container.innerHTML = html;
+  adjustShelfWidth();
+}
+
+function renderEmpty(msg) {
+  document.getElementById("shelf-container").innerHTML =
+    '<div class="empty-shelf">' +
+    '<div class="empty-shelf-icon">📚</div>' +
+    '<div class="empty-shelf-text">' + (msg || "まだ棚が空です。最初の一冊を並べてみましょう。") + '</div>' +
+    '</div>';
+}
+
+function openModal(idx) {
+  var b = window._displayedBooks[idx];
+  if (!b) return;
+  var top = document.getElementById("modal-top");
+  var body = document.getElementById("modal-body");
+
+  // ISBNがあれば楽天のISBN直接検索、なければタイトル検索
+  var rakutenUrl = b.isbn
+    ? "https://books.rakuten.co.jp/search?sty=1&g=001&sitem=" + encodeURIComponent(b.isbn)
+    : "https://books.rakuten.co.jp/search?sty=1&g=001&k=" + encodeURIComponent(b.title);
+
+  var coverHtml = b.cover
+    ? '<a href="' + rakutenUrl + '" target="_blank"><img class="modal-cover" src="' + esc(b.cover) + '" alt="表紙" title="楽天ブックスで探す"></a>'
+    : '<div class="modal-cover-ph">表紙なし</div>';
+
+  top.innerHTML =
+    coverHtml +
+    '<div class="modal-header-info">' +
+      '<a href="' + rakutenUrl + '" target="_blank" style="text-decoration:none;color:inherit;">' +
+        '<div class="modal-title">' + esc(b.title) + ' <span style="font-size:.65rem;color:rgba(253,248,240,.6);">↗</span></div>' +
+      '</a>' +
+      '<div class="modal-author">' + esc(b.author) + '</div>' +
+      '<div class="modal-pub">' + esc(b.publisher) + '</div>' +
+      (b.genre ? '<span class="modal-genre-tag">' + esc(b.genre) + '</span>' : '') +
+    '</div>';
+
+  body.innerHTML =
+    '<div class="modal-from">棚主：<span class="from-name">' + esc(b.nickname) + '</span> さんの推薦</div>' +
+    '<div class="modal-comment">' + esc(b.comment).replace(/\n/g,'<br>') + '</div>' +
+    '<a href="' + rakutenUrl + '" target="_blank" style="display:block;margin-top:1rem;text-align:center;font-size:.75rem;color:var(--gold);text-decoration:underline;">楽天ブックスでこの本を探す ↗</a>';
+
+  document.getElementById("modal-overlay").classList.add("open");
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById("modal-overlay") || e.currentTarget.classList.contains("modal-close")) {
+    document.getElementById("modal-overlay").classList.remove("open");
+  }
+}
+</script>
+</body>
+</html>
