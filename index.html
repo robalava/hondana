@@ -307,16 +307,16 @@ body {
 }
 
 .book-cover-img {
-  width: 68px;
-  min-width: 68px;
-  flex-shrink: 0;
-  height: auto;
-  object-fit: contain;
+  width: auto;
+  max-width: 80px;
+  height: 160px;
+  object-fit: cover;
   border-radius: 1px 4px 4px 1px;
   box-shadow:
     3px 4px 12px rgba(38,28,16,.35),
     inset -2px 0 4px rgba(0,0,0,.2);
   display: block;
+  flex-shrink: 0;
 }
 
 /* 本の色 */
@@ -616,7 +616,7 @@ body {
 var allBooks = [];
 var currentGenre = "";
 var BOOK_W = 68 + 3; // 本幅 + gap
-var SHELF_PAD = 48;  // 左右padding + 余裕
+var SHELF_PAD = 24;  // 左右padding
 var SHELF_W = Math.min(window.innerWidth - 16, 560);
 var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - SHELF_PAD) / BOOK_W));
 
