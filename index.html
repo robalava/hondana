@@ -144,8 +144,7 @@ body {
 .shelf-books {
   display: flex;
   align-items: flex-end;
-  gap: 3px;
-  padding: .5rem .8rem 0;
+  gap: 2px;
   min-height: 230px;
   width: 100%;
   box-sizing: border-box;
@@ -215,7 +214,7 @@ body {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   cursor: pointer;
   transition: transform .25s cubic-bezier(.34,1.56,.64,1), filter .25s;
   transform-origin: bottom center;
@@ -615,7 +614,11 @@ body {
 var allBooks = [];
 var currentGenre = "";
 var SHELF_W = Math.min(window.innerWidth - 8, 560);
-var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - 24) / (52 + 3)));
+var SHELF_PAD = 10; // 左右padding合計
+var GAP = 2;
+var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - SHELF_PAD) / (52 + GAP)));
+// 本の幅を棚幅÷冊数に合わせて計算（余白ゼロ）
+var BOOK_W = Math.floor((SHELF_W - SHELF_PAD - GAP * (SHELF_SIZE - 1)) / SHELF_SIZE);
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
@@ -747,7 +750,7 @@ function renderShelf(books) {
       var spineH = 160 + (h % 50); // 160〜209px（縦長でスリムな背表紙）
       var coverH = Math.round(spineH * 0.74);
       html += '<div class="book-item" onclick="openModal(' + globalIdx + ')">';
-      html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px">' + esc(b.title) + '</div>';
+      html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px;width:' + BOOK_W + 'px">' + esc(b.title) + '</div>';
       html += '</div>';
     });
     html += '</div>';
