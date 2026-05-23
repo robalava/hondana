@@ -632,32 +632,67 @@ function esc(s) {
   return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
 
+var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbz3GfkpeUbM_SCMuV7jBh1H65AXtr8z1mu7LHq4J1Lm8glMvQARfTkrRSZDe686jGrX/exec';
 
-// データ読み込み（JSONP方式でCORSを回避）
-function loadBooksJSONP() {
-  window._booksCallback = function(res) {
+// CSVをパース
+function parseCSV(text) {
+  var lines = text.split('\n');
+  if (lines.length < 2) return [];
+  var books = [];
+  for (var i = 1; i < lines.length; i++) {
+    var cols = splitCSVLine(lines[i]);
+    if (!cols[0]) continue;
+    books.push({
+      id:        cols[0] || '',
+      timestamp: cols[1] || '',
+      nickname:  cols[3] || '',
+      isbn:      cols[4] || '',
+      title:     cols[5] || '',
+      author:    cols[6] || '',
+      publisher: cols[7] || '',
+      cover:     cols[8] || '',
+      comment:   cols[9] || '',
+      genre:     cols[10] || ''
+    });
+  }
+  books.reverse();
+  return books;
+}
+
+function splitCSVLine(line) {
+  var cols = [];
+  var cur = '';
+  var inQ = false;
+  for (var i = 0; i < line.length; i++) {
+    var c = line[i];
+    if (c === '"') { inQ = !inQ; }
+    else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+    else { cur += c; }
+  }
+  cols.push(cur.trim());
+  return cols;
+}
+
+// データ読み込み
+fetch(SHEET_CSV_URL)
+  .then(function(r){ return r.text(); })
+  .then(function(csv){
     document.getElementById("loading").style.display = "none";
     document.getElementById("shelf-container").style.display = "block";
-    if (!res || res.status !== "ok") { renderEmpty("データの読み込みに失敗しました"); return; }
-    allBooks = res.books || [];
+    allBooks = parseCSV(csv);
     if (allBooks.length === 0) {
       renderEmpty("まだ棚が空です。最初の一冊を並べてみましょう。");
       return;
     }
     buildFilters();
     renderShelf(allBooks);
-  };
-  var script = document.createElement('script');
-  script.src = GAS_URL + '?page=api&action=books&callback=_booksCallback';
-  script.onerror = function() {
+  })
+  .catch(function(err){
     document.getElementById("loading").style.display = "none";
     document.getElementById("shelf-container").style.display = "block";
-    renderEmpty("読み込みエラーが発生しました");
-  };
-  document.head.appendChild(script);
-}
-loadBooksJSONP();
+    renderEmpty("読み込みエラー: " + err.message);
+  });
 
 function buildFilters() {
   var genres = {};
