@@ -307,9 +307,11 @@ body {
 }
 
 .book-cover-img {
-  width: 100%;
-  height: 110px;
-  object-fit: cover;
+  width: 68px;
+  min-width: 68px;
+  flex-shrink: 0;
+  height: auto;
+  object-fit: contain;
   border-radius: 1px 4px 4px 1px;
   box-shadow:
     3px 4px 12px rgba(38,28,16,.35),
@@ -614,7 +616,7 @@ body {
 var allBooks = [];
 var currentGenre = "";
 var BOOK_W = 68 + 3; // 本幅 + gap
-var SHELF_PAD = 32;  // 左右padding
+var SHELF_PAD = 48;  // 左右padding + 余裕
 var SHELF_W = Math.min(window.innerWidth - 16, 560);
 var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - SHELF_PAD) / BOOK_W));
 
@@ -749,7 +751,7 @@ function renderShelf(books) {
       var coverH = Math.round(spineH * 0.74);
       html += '<div class="book-item" onclick="openModal(' + globalIdx + ')">';
       if (b.cover) {
-        html += '<img class="book-cover-img" src="' + esc(b.cover) + '" alt="' + esc(b.title) + '" loading="lazy" style="height:' + coverH + 'px" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
+        html += '<img class="book-cover-img" src="' + esc(b.cover) + '" alt="' + esc(b.title) + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
         html += '<div class="book-spine ' + spineColor(b.title) + '" style="display:none;height:' + spineH + 'px">' + esc(b.title) + '</div>';
       } else {
         html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px">' + esc(b.title) + '</div>';
