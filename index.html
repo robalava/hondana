@@ -677,7 +677,7 @@ function splitCSVLine(line) {
 // データ読み込み - GAS経由でCORSを回避
 var GAS_API = GAS_URL + '?page=api&action=books';
 
-fetch(GAS_API)
+fetch(GAS_API, { redirect: 'follow' })
   .then(function(r){ return r.text(); })
   .then(function(text){
     // JSONPレスポンスの場合はコールバック部分を除去
