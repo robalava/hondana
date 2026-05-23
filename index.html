@@ -680,7 +680,6 @@ var GAS_API = GAS_URL + '?page=api&action=books';
 fetch(GAS_API, { redirect: 'follow' })
   .then(function(r){ return r.text(); })
   .then(function(text){
-    // JSONPレスポンスの場合はコールバック部分を除去
     var json = text.trim();
     if (json.indexOf('_booksCallback(') === 0) {
       json = json.slice('_booksCallback('.length, -1);
@@ -697,23 +696,10 @@ fetch(GAS_API, { redirect: 'follow' })
     buildFilters();
     renderShelf(allBooks);
   })
-  .catch(function(){
-    // fetchが失敗した場合はCSVにフォールバック
-    fetch(SHEET_CSV_URL)
-      .then(function(r){ return r.text(); })
-      .then(function(csv){
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("shelf-container").style.display = "block";
-        allBooks = parseCSV(csv);
-        if (allBooks.length === 0) { renderEmpty("まだ棚が空です。最初の一冊を並べてみましょう。"); return; }
-        buildFilters();
-        renderShelf(allBooks);
-      })
-      .catch(function(err){
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("shelf-container").style.display = "block";
-        renderEmpty("読み込みエラー: " + err.message);
-      });
+  .catch(function(err){
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("shelf-container").style.display = "block";
+    renderEmpty("読み込みエラー: " + err.message);
   });
 
 function buildFilters() {
