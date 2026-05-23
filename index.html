@@ -308,8 +308,7 @@ body {
 
 .book-cover-img {
   width: auto;
-  max-width: 80px;
-  height: 160px;
+  max-width: 90px;
   object-fit: cover;
   border-radius: 1px 4px 4px 1px;
   box-shadow:
@@ -616,8 +615,8 @@ body {
 var allBooks = [];
 var currentGenre = "";
 var BOOK_W = 68 + 3; // 本幅 + gap
-var SHELF_PAD = 24;  // 左右padding
-var SHELF_W = Math.min(window.innerWidth - 16, 560);
+var SHELF_PAD = 16;  // 左右padding
+var SHELF_W = Math.min(window.innerWidth - 8, 560);
 var SHELF_SIZE = Math.max(3, Math.floor((SHELF_W - SHELF_PAD) / BOOK_W));
 
 var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQh3nVGjVrSxeAV3jBtE0VjfwDwkV7W1XRtnGoO27fThwIzQrvmproeNQVt-uQYpwEzcluFWXDHo_CP/pub?output=csv';
@@ -751,7 +750,7 @@ function renderShelf(books) {
       var coverH = Math.round(spineH * 0.74);
       html += '<div class="book-item" onclick="openModal(' + globalIdx + ')">';
       if (b.cover) {
-        html += '<img class="book-cover-img" src="' + esc(b.cover) + '" alt="' + esc(b.title) + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
+        html += '<img class="book-cover-img" src="' + esc(b.cover) + '" alt="' + esc(b.title) + '" loading="lazy" style="height:' + spineH + 'px" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
         html += '<div class="book-spine ' + spineColor(b.title) + '" style="display:none;height:' + spineH + 'px">' + esc(b.title) + '</div>';
       } else {
         html += '<div class="book-spine ' + spineColor(b.title) + '" style="height:' + spineH + 'px">' + esc(b.title) + '</div>';
