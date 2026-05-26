@@ -421,7 +421,11 @@ body {
     <div id="current-theme-info" style="margin-bottom:.8rem;font-size:.8rem;color:var(--ink3);"></div>
     <div class="field">
       <span class="field-label">テーマ</span>
-      <input type="text" class="id-input" id="theme-input" placeholder="例：ファンタジーの食卓" style="width:100%;margin-bottom:.6rem;">
+      <input type="text" class="id-input" id="theme-input" placeholder="例：ファンタジーの素" style="width:100%;margin-bottom:.6rem;">
+    </div>
+    <div class="field">
+      <span class="field-label">説明文（任意）</span>
+      <textarea class="id-input" id="theme-description-input" placeholder="例：あなたのファンタジーの素となった物語を教えてください。" style="width:100%;min-height:80px;resize:vertical;margin-bottom:.6rem;"></textarea>
     </div>
     <button class="btn-primary" onclick="submitTheme()" style="margin-bottom:.5rem;">テーマを掲げる</button>
     <div id="theme-status" class="status-msg"></div>
@@ -537,13 +541,16 @@ function updateThemeSection() {
   if (currentActiveTheme) {
     var isOwner = currentActiveTheme.shopkeeper_id === currentId;
     info.innerHTML = '現在のテーマ：<strong>「' + currentActiveTheme.theme + '」</strong>（あと' + currentActiveTheme.days_left + '日）' +
-      (isOwner ? ' <button onclick="endCurrentTheme()" style="font-size:.7rem;padding:.2rem .6rem;background:transparent;border:1px solid var(--ink3);border-radius:3px;cursor:pointer;color:var(--ink3);">テーマを下げる</button>' : '');
+      (currentActiveTheme.description ? '<br><span style="font-size:.75rem;">' + currentActiveTheme.description + '</span>' : '') +
+      (isOwner ? ' <button onclick="endCurrentTheme()" style="font-size:.7rem;padding:.2rem .6rem;background:transparent;border:1px solid var(--ink3);border-radius:3px;cursor:pointer;color:var(--ink3);margin-top:.4rem;display:inline-block;">テーマを下げる</button>' : '');
     if (isOwner) {
-      input.value = currentActiveTheme.theme;
+      document.getElementById('theme-input').value = currentActiveTheme.theme;
+      document.getElementById('theme-description-input').value = currentActiveTheme.description || '';
     }
   } else {
     info.textContent = '現在掲げられているテーマはありません。';
-    input.value = '';
+    document.getElementById('theme-input').value = '';
+    document.getElementById('theme-description-input').value = '';
   }
 }
 
@@ -553,7 +560,7 @@ function submitTheme() {
   var status = document.getElementById('theme-status');
   status.textContent = '送信中…';
 
-  gasPost({ action: "postTheme", shopkeeper_id: currentId, nickname: myBooks.length > 0 ? myBooks[0].nickname : currentId, theme: theme })
+  gasPost({ action: "postTheme", shopkeeper_id: currentId, nickname: myBooks.length > 0 ? myBooks[0].nickname : currentId, theme: theme, description: document.getElementById('theme-description-input').value.trim() })
     .then(function(res){
       if (res.status === "ok") {
         status.textContent = 'テーマを掲げました！';

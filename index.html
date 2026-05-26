@@ -124,10 +124,12 @@ body {
   letter-spacing: .1em;
   margin-bottom: .25rem;
 }
-.theme-meta {
-  font-size: .62rem;
-  color: rgba(38,28,16,.55);
-  letter-spacing: .06em;
+.theme-description {
+  font-size: .72rem;
+  color: rgba(38,28,16,.7);
+  margin-bottom: .2rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  line-height: 1.6;
 }
 .shelves-wrap {
   flex: 1;
@@ -490,6 +492,7 @@ body {
 <div class="theme-banner" id="theme-banner">
   <div class="theme-label">📌 ただいまのテーマ</div>
   <div class="theme-text" id="theme-text"></div>
+  <div class="theme-description" id="theme-description"></div>
   <div class="theme-meta" id="theme-meta"></div>
 </div>
 
@@ -580,6 +583,7 @@ fetch(GAS_URL + '?page=api&action=theme', { redirect: 'follow' })
     if (res.status === "ok" && res.theme) {
       var t = res.theme;
       document.getElementById('theme-text').textContent = t.theme;
+      document.getElementById('theme-description').textContent = t.description || '';
       document.getElementById('theme-meta').textContent = 'あと' + t.days_left + '日';
       document.getElementById('theme-banner').classList.add('visible');
     }
