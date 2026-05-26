@@ -640,22 +640,44 @@ function buildFilters() {
       bar.appendChild(btn);
     });
   }
-  bar.querySelector('[data-genre=""]').addEventListener("click", function(){ filterBy("", this, ""); });
+  bar.querySelector('[data-genre=""]').addEventListener("click", function(){
+    currentFilter = { genre: "", theme: "" };
+    document.querySelectorAll(".filter-btn").forEach(function(b){ b.classList.remove("active"); });
+    this.classList.add("active");
+    renderShelf(allBooks);
+  });
 }
 
+var currentFilter = { genre: "", theme: "" };
+
 function filterBy(value, el, type) {
-  document.querySelectorAll(".filter-btn").forEach(function(b){ b.classList.remove("active"); });
-  el.classList.add("active");
-  var filtered;
-  if (!value) {
-    filtered = allBooks;
-  } else if (type === "genre") {
-    filtered = allBooks.filter(function(b){ return b.genre === value; });
-  } else if (type === "theme") {
-    filtered = allBooks.filter(function(b){ return b.theme === value; });
+  // 同じボタンを再クリックしたら解除
+  if (currentFilter[type] === value) {
+    currentFilter[type] = "";
+    el.classList.remove("active");
   } else {
-    filtered = allBooks;
+    // 同じタイプの他のボタンのアクティブを外す
+    document.querySelectorAll(".filter-btn[data-" + type + "]").forEach(function(b){
+      b.classList.remove("active");
+    });
+    currentFilter[type] = value;
+    if (value) el.classList.add("active");
   }
+
+  // すべてボタンの状態を更新
+  var allBtn = document.querySelector('.filter-btn[data-genre=""]');
+  if (!currentFilter.genre && !currentFilter.theme) {
+    if (allBtn) allBtn.classList.add("active");
+  } else {
+    if (allBtn) allBtn.classList.remove("active");
+  }
+
+  // AND条件で絞り込み
+  var filtered = allBooks.filter(function(b){
+    var genreOk = !currentFilter.genre || b.genre === currentFilter.genre;
+    var themeOk = !currentFilter.theme || b.theme === currentFilter.theme;
+    return genreOk && themeOk;
+  });
   renderShelf(filtered);
 }
 
