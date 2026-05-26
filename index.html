@@ -580,8 +580,7 @@ fetch(GAS_URL + '?page=api&action=theme', { redirect: 'follow' })
     if (res.status === "ok" && res.theme) {
       var t = res.theme;
       document.getElementById('theme-text').textContent = t.theme;
-      document.getElementById('theme-meta').textContent =
-        t.nickname + ' さんより・あと' + t.days_left + '日';
+      document.getElementById('theme-meta').textContent = 'あと' + t.days_left + '日';
       document.getElementById('theme-banner').classList.add('visible');
     }
   })

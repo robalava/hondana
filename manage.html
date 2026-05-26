@@ -532,8 +532,7 @@ function updateThemeSection() {
   var input = document.getElementById('theme-input');
   if (currentActiveTheme) {
     var isOwner = currentActiveTheme.shopkeeper_id === currentId;
-    info.innerHTML = '現在のテーマ：<strong>「' + currentActiveTheme.theme + '」</strong>（' +
-      currentActiveTheme.nickname + ' さん・あと' + currentActiveTheme.days_left + '日）' +
+    info.innerHTML = '現在のテーマ：<strong>「' + currentActiveTheme.theme + '」</strong>（あと' + currentActiveTheme.days_left + '日）' +
       (isOwner ? ' <button onclick="endCurrentTheme()" style="font-size:.7rem;padding:.2rem .6rem;background:transparent;border:1px solid var(--ink3);border-radius:3px;cursor:pointer;color:var(--ink3);">テーマを下げる</button>' : '');
     if (isOwner) {
       input.value = currentActiveTheme.theme;
