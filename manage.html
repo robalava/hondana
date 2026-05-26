@@ -415,6 +415,18 @@ body {
     <div id="book-list"></div>
   </div>
 
+  <!-- テーマ管理 -->
+  <div class="my-books" id="theme-section" style="display:none;">
+    <div class="my-books-header">テーマを掲げる</div>
+    <div id="current-theme-info" style="margin-bottom:.8rem;font-size:.8rem;color:var(--ink3);"></div>
+    <div class="field">
+      <span class="field-label">テーマ</span>
+      <input type="text" class="id-input" id="theme-input" placeholder="例：ファンタジーの食卓" style="width:100%;margin-bottom:.6rem;">
+    </div>
+    <button class="btn-primary" onclick="submitTheme()" style="margin-bottom:.5rem;">テーマを掲げる</button>
+    <div id="theme-status" class="status-msg"></div>
+  </div>
+
 </div>
 
 <!-- 編集モーダル -->
@@ -499,6 +511,70 @@ function showConfirm(msg, callback) {
 
 var currentId = "";
 var myBooks = [];
+var currentActiveTheme = null;
+
+// テーマ読み込み
+function loadActiveTheme() {
+  fetch(GAS_URL + '?page=api&action=theme', { redirect: 'follow' })
+    .then(function(r){ return r.text(); })
+    .then(function(text){
+      var json = text.trim();
+      if (json.indexOf('_booksCallback(') === 0) json = json.slice(15, -1);
+      var res = JSON.parse(json);
+      currentActiveTheme = (res.status === "ok") ? res.theme : null;
+      updateThemeSection();
+    })
+    .catch(function(){});
+}
+
+function updateThemeSection() {
+  var info = document.getElementById('current-theme-info');
+  var input = document.getElementById('theme-input');
+  if (currentActiveTheme) {
+    var isOwner = currentActiveTheme.shopkeeper_id === currentId;
+    info.innerHTML = '現在のテーマ：<strong>「' + currentActiveTheme.theme + '」</strong>（' +
+      currentActiveTheme.nickname + ' さん・あと' + currentActiveTheme.days_left + '日）' +
+      (isOwner ? ' <button onclick="endCurrentTheme()" style="font-size:.7rem;padding:.2rem .6rem;background:transparent;border:1px solid var(--ink3);border-radius:3px;cursor:pointer;color:var(--ink3);">テーマを下げる</button>' : '');
+    if (isOwner) {
+      input.value = currentActiveTheme.theme;
+    }
+  } else {
+    info.textContent = '現在掲げられているテーマはありません。';
+    input.value = '';
+  }
+}
+
+function submitTheme() {
+  var theme = document.getElementById('theme-input').value.trim();
+  if (!theme) { showAlert("テーマを入力してください。"); return; }
+  var status = document.getElementById('theme-status');
+  status.textContent = '送信中…';
+
+  gasPost({ action: "postTheme", shopkeeper_id: currentId, nickname: myBooks.length > 0 ? myBooks[0].nickname : currentId, theme: theme })
+    .then(function(res){
+      if (res.status === "ok") {
+        status.textContent = 'テーマを掲げました！';
+        loadActiveTheme();
+      } else {
+        status.textContent = 'エラー: ' + (res.message || "不明なエラー");
+      }
+    })
+    .catch(function(err){ status.textContent = '通信エラー: ' + err.message; });
+}
+
+function endCurrentTheme() {
+  if (!currentActiveTheme) return;
+  showConfirm("テーマを下げますか？", function() {
+    gasPost({ action: "endTheme", shopkeeper_id: currentId, theme_id: currentActiveTheme.id })
+      .then(function(res){
+        if (res.status === "ok") {
+          loadActiveTheme();
+        } else {
+          showAlert("エラー: " + (res.message || "不明なエラー"));
+        }
+      });
+  });
+}
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbwWWeFyPlaV-ecJqtP0yesf-jjqWD7iWBluCZSJOwV5yH_thrq4xz_wCbx6oxuJrGk0_Q/exec';
 
 function esc(s) {
@@ -528,6 +604,8 @@ function loadMyBooks() {
       if (res.status === "empty") {
         showStatus("このIDで登録された本はまだありません。", false);
         document.getElementById("my-books").classList.remove("show");
+        document.getElementById('theme-section').style.display = 'block';
+        loadActiveTheme();
         return;
       }
       if (res.status !== "ok") {
@@ -536,6 +614,8 @@ function loadMyBooks() {
       myBooks = res.books;
       renderBooks();
       showStatus("", false);
+      document.getElementById('theme-section').style.display = 'block';
+      loadActiveTheme();
     })
     .catch(function(err){
       btn.disabled = false; btn.textContent = "確認する";
