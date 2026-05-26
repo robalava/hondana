@@ -607,6 +607,8 @@ fetch(GAS_URL + '?page=api&action=books', { redirect: 'follow' })
     renderEmpty("読み込みエラー: " + err.message);
   });
 
+var currentFilter = { genre: "", theme: "" };
+
 function buildFilters() {
   var genres = {};
   var themes = {};
@@ -647,8 +649,6 @@ function buildFilters() {
     renderShelf(allBooks);
   });
 }
-
-var currentFilter = { genre: "", theme: "" };
 
 function filterBy(value, el, type) {
   // 同じボタンを再クリックしたら解除
