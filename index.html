@@ -609,24 +609,54 @@ fetch(GAS_URL + '?page=api&action=books', { redirect: 'follow' })
 
 function buildFilters() {
   var genres = {};
-  allBooks.forEach(function(b){ if (b.genre) genres[b.genre] = true; });
+  var themes = {};
+  allBooks.forEach(function(b){
+    if (b.genre) genres[b.genre] = true;
+    if (b.theme) themes[b.theme] = true;
+  });
   var bar = document.getElementById("filter-btns");
+  // ジャンルボタン
   Object.keys(genres).sort().forEach(function(g){
     var btn = document.createElement("button");
     btn.className = "filter-btn";
     btn.dataset.genre = g;
     btn.textContent = g;
-    btn.addEventListener("click", function(){ filterBy(g, btn); });
+    btn.addEventListener("click", function(){ filterBy(g, btn, "genre"); });
     bar.appendChild(btn);
   });
-  bar.querySelector('[data-genre=""]').addEventListener("click", function(){ filterBy("", this); });
+  // テーマボタン（区切り線付き）
+  var themeKeys = Object.keys(themes).sort();
+  if (themeKeys.length > 0) {
+    var sep = document.createElement("span");
+    sep.style.cssText = "color:var(--ink3);font-size:.6rem;padding:0 .2rem;opacity:.5;";
+    sep.textContent = "｜";
+    bar.appendChild(sep);
+    themeKeys.forEach(function(t){
+      var btn = document.createElement("button");
+      btn.className = "filter-btn";
+      btn.dataset.theme = t;
+      btn.textContent = "📌" + t;
+      btn.addEventListener("click", function(){ filterBy(t, btn, "theme"); });
+      bar.appendChild(btn);
+    });
+  }
+  bar.querySelector('[data-genre=""]').addEventListener("click", function(){ filterBy("", this, ""); });
 }
 
-function filterBy(genre, el) {
-  currentGenre = genre;
+function filterBy(value, el, type) {
   document.querySelectorAll(".filter-btn").forEach(function(b){ b.classList.remove("active"); });
   el.classList.add("active");
-  renderShelf(genre ? allBooks.filter(function(b){ return b.genre === genre; }) : allBooks);
+  var filtered;
+  if (!value) {
+    filtered = allBooks;
+  } else if (type === "genre") {
+    filtered = allBooks.filter(function(b){ return b.genre === value; });
+  } else if (type === "theme") {
+    filtered = allBooks.filter(function(b){ return b.theme === value; });
+  } else {
+    filtered = allBooks;
+  }
+  renderShelf(filtered);
 }
 
 function renderShelf(books) {
